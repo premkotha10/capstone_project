@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Environment / secrets
+.env
+
+# Data: only manifests and tiny samples are tracked (DATA_ROOT lives outside OneDrive)
+data/raw/**
+data/processed/**
+data/annotations/**
+!data/annotations/reference_counts/
+!data/annotations/reference_counts/**
+!data/**/.gitkeep
+data/samples/**/*.mp4
+data/samples/**/*.avi
+
+# Model weights
+models/**/*.pt
+models/**/*.onnx
+models/**/*.bin
+models/**/*.xml
+*.pt
+
+# Run outputs (reports are committed deliberately, raw run dumps are not)
+runs/
+reports/**/raw/
+*.log
+logs/
+
+# IDE / OS
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# User-supplied sample videos (unknown licence, large): keep local
+tests/Video/
+.claude/
+
+# Generated deployment bundles
+build/

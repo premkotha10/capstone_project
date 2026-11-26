@@ -1,0 +1,19 @@
+# Camera calibration / counting geometry for Barbados "Norman Niles #1" (960x540 frames).
+# Lines are in PIXEL coordinates (O2-A, image-space counting). Placed by inspecting a 09:05 local frame with a grid.
+# Direction is defined by which side of the line a track moves to: `positive` = crossing in the direction of the
+# line's left-hand normal (for a line drawn p1 -> p2 in image coordinates, y pointing down).
+camera_id: normanniles1
+frame_size: [960, 540]
+lines:
+  - name: approach
+    description: Across the approach road just before the roundabout (both carriageways).
+    p1: [250, 226]
+    p2: [655, 238]
+    positive: exiting     # moving up the image, away from the roundabout
+    negative: entering    # moving down the image, into the roundabout
+  - name: circulating_west
+    description: Across the circulating carriageway on the left of the view.
+    p1: [150, 244]
+    p2: [150, 335]
+    positive: eastbound   # moving right
+    negative: westbound   # moving left

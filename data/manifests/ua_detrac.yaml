@@ -1,0 +1,409 @@
+dataset: ua_detrac
+version: 'UA-DETRAC (author Google Drive release: DETRAC-Images.zip + XML annotations)'
+source_url: https://sites.google.com/view/daweidu/projects/ua-detrac
+access_date: '2026-11-23'
+licence: unverified — treated as academic, non-commercial use with citation
+licence_verified: false
+custodian: UA-DETRAC authors (University at Albany / Tianjin University)
+citation: 'L. Wen et al., UA-DETRAC: A new benchmark and protocol for multi-object
+  detection and tracking, Computer Vision and Image Understanding, 2020.'
+notes:
+- Original site detrac-db.rit.albany.edu is offline; files from the author page's
+  Google Drive links.
+- Only selected sequences were extracted from DETRAC-Images.zip via HTTP range requests.
+- Site grouping uses a documented proxy (first four digits of the sequence ID).
+exclusions: []
+transformations: []
+items:
+- id: DETRAC-Test-Annotations-XML
+  file: raw/ua_detrac/annotations/DETRAC-Test-Annotations-XML.zip
+  sha256: c274a7a96b33445e13693f2d0082d58acac34c94275ee89b8378c4348a6b3209
+  size_bytes: 12239887
+  source_ref: gdrive:1zc8KZWUa3Cw0DbcFqTCMBmUZzbfuhGKr
+  partition: unassigned
+  attributes:
+    kind: annotations
+  used_by:
+  - O2
+  - O3
+  - KPI-1
+  - KPI-4
+  - KPI-5
+- id: DETRAC-Train-Annotations-XML
+  file: raw/ua_detrac/annotations/DETRAC-Train-Annotations-XML.zip
+  sha256: d6ce5dcf409680096fea289f4731e56d014cc7667a013f35a5eb6a8261cf8f0f
+  size_bytes: 12797880
+  source_ref: gdrive:1f22g3puG164gemY_njcPG8beuCcuMjqb
+  partition: unassigned
+  attributes:
+    kind: annotations
+  used_by:
+  - O2
+  - O3
+  - KPI-1
+  - KPI-4
+  - KPI-5
+- id: MVI_20011
+  file: raw/ua_detrac/images/MVI_20011
+  sha256: 1176d9f984ffb2f582bd634a8c16ee97f27153a795ffa6a6ce67242e23def887
+  size_bytes: 52685014
+  source_ref: gdrive:1fQC6CEWOeL9pnJ4ZdD7U2gromcnWDRgm#DETRAC-Images/MVI_20011/
+  partition: unassigned
+  attributes:
+    split_original: train
+    weather: sunny
+    camera_state: unstable
+    site_proxy: MVI_2001
+    frames_annotated: 664
+    frames_images: 664
+    tracks: 53
+    mean_density: 11.53
+    occluded_fraction: 0.197
+    subset_version: v1
+  used_by:
+  - O2
+  - O3
+  - KPI-1
+  - KPI-4
+  - KPI-5
+  - NT-1
+  - NT-2
+  - NT-4
+- id: MVI_39051
+  file: raw/ua_detrac/images/MVI_39051
+  sha256: 57db5af116a757b288701cad505966cf985306b02c4d792cac2807677a1b363c
+  size_bytes: 148673333
+  source_ref: gdrive:1fQC6CEWOeL9pnJ4ZdD7U2gromcnWDRgm#DETRAC-Images/MVI_39051/
+  partition: unassigned
+  attributes:
+    split_original: test
+    weather: sunny
+    camera_state: stable
+    site_proxy: MVI_3905
+    frames_annotated: 1051
+    frames_images: 1120
+    tracks: 30
+    mean_density: 2.32
+    occluded_fraction: 0.054
+    subset_version: v1
+  used_by:
+  - O2
+  - O3
+  - KPI-1
+  - KPI-4
+  - KPI-5
+  - NT-1
+  - NT-2
+  - NT-4
+- id: MVI_39311
+  file: raw/ua_detrac/images/MVI_39311
+  sha256: 04b1576671900f2ec33a7f24ebc0d4ac53284faf158bb8e2e221a8196f633978
+  size_bytes: 114983382
+  source_ref: gdrive:1fQC6CEWOeL9pnJ4ZdD7U2gromcnWDRgm#DETRAC-Images/MVI_39311/
+  partition: unassigned
+  attributes:
+    split_original: test
+    weather: sunny
+    camera_state: unstable
+    site_proxy: MVI_3931
+    frames_annotated: 1505
+    frames_images: 1505
+    tracks: 51
+    mean_density: 14.92
+    occluded_fraction: 0.387
+    subset_version: v1
+  used_by:
+  - O2
+  - O3
+  - KPI-1
+  - KPI-4
+  - KPI-5
+  - NT-1
+  - NT-2
+  - NT-4
+- id: MVI_39781
+  file: raw/ua_detrac/images/MVI_39781
+  sha256: f3a725620cfd3b2e387d140d419778846e91abf181e49bba5394967ca06f4959
+  size_bytes: 91697791
+  source_ref: gdrive:1fQC6CEWOeL9pnJ4ZdD7U2gromcnWDRgm#DETRAC-Images/MVI_39781/
+  partition: unassigned
+  attributes:
+    split_original: train
+    weather: night
+    camera_state: stable
+    site_proxy: MVI_3978
+    frames_annotated: 1861
+    frames_images: 1865
+    tracks: 50
+    mean_density: 4.11
+    occluded_fraction: 0.332
+    subset_version: v1
+  used_by:
+  - O2
+  - O3
+  - KPI-1
+  - KPI-4
+  - KPI-5
+  - NT-1
+  - NT-2
+  - NT-4
+- id: MVI_40141
+  file: raw/ua_detrac/images/MVI_40141
+  sha256: 46c39d7bf429961da5e0b963adb9892b9932788554f955f4083dc49331bfd4d7
+  size_bytes: 110406035
+  source_ref: gdrive:1fQC6CEWOeL9pnJ4ZdD7U2gromcnWDRgm#DETRAC-Images/MVI_40141/
+  partition: unassigned
+  attributes:
+    split_original: train
+    weather: cloudy
+    camera_state: stable
+    site_proxy: MVI_4014
+    frames_annotated: 1600
+    frames_images: 1600
+    tracks: 33
+    mean_density: 3.89
+    occluded_fraction: 0.031
+    subset_version: v1
+  used_by:
+  - O2
+  - O3
+  - KPI-1
+  - KPI-4
+  - KPI-5
+  - NT-1
+  - NT-2
+  - NT-4
+- id: MVI_40171
+  file: raw/ua_detrac/images/MVI_40171
+  sha256: 9cb77e73946e93a8ab20e56f42897e120a590851fbb0466ba8810f3fb5a40af6
+  size_bytes: 93834645
+  source_ref: gdrive:1fQC6CEWOeL9pnJ4ZdD7U2gromcnWDRgm#DETRAC-Images/MVI_40171/
+  partition: unassigned
+  attributes:
+    split_original: train
+    weather: cloudy
+    camera_state: unstable
+    site_proxy: MVI_4017
+    frames_annotated: 1150
+    frames_images: 1150
+    tracks: 44
+    mean_density: 7.76
+    occluded_fraction: 0.644
+    subset_version: v1
+  used_by:
+  - O2
+  - O3
+  - KPI-1
+  - KPI-4
+  - KPI-5
+  - NT-1
+  - NT-2
+  - NT-4
+- id: MVI_40201
+  file: raw/ua_detrac/images/MVI_40201
+  sha256: 97cbffeeb9a3ad4a07e608307470ab7a3ca22b175269d9b513690e72dbcd6299
+  size_bytes: 62018910
+  source_ref: gdrive:1fQC6CEWOeL9pnJ4ZdD7U2gromcnWDRgm#DETRAC-Images/MVI_40201/
+  partition: unassigned
+  attributes:
+    split_original: train
+    weather: cloudy
+    camera_state: stable
+    site_proxy: MVI_4020
+    frames_annotated: 925
+    frames_images: 925
+    tracks: 127
+    mean_density: 11.81
+    occluded_fraction: 0.296
+    subset_version: v1
+  used_by:
+  - O2
+  - O3
+  - KPI-1
+  - KPI-4
+  - KPI-5
+  - NT-1
+  - NT-2
+  - NT-4
+- id: MVI_40742
+  file: raw/ua_detrac/images/MVI_40742
+  sha256: 567eb967fb8ec0876ddb68435e8ab9b52e04902cdb667892cf50c0e55ee95874
+  size_bytes: 153958751
+  source_ref: gdrive:1fQC6CEWOeL9pnJ4ZdD7U2gromcnWDRgm#DETRAC-Images/MVI_40742/
+  partition: unassigned
+  attributes:
+    split_original: test
+    weather: night
+    camera_state: stable
+    site_proxy: MVI_4074
+    frames_annotated: 1655
+    frames_images: 1655
+    tracks: 33
+    mean_density: 15.19
+    occluded_fraction: 0.541
+    subset_version: v1
+  used_by:
+  - O2
+  - O3
+  - KPI-1
+  - KPI-4
+  - KPI-5
+  - NT-1
+  - NT-2
+  - NT-4
+- id: MVI_40855
+  file: raw/ua_detrac/images/MVI_40855
+  sha256: 36cb70443aaed7c3fa0a8a53032a317c9c7aa094c2c75916d3eaab1779be1e88
+  size_bytes: 70147379
+  source_ref: gdrive:1fQC6CEWOeL9pnJ4ZdD7U2gromcnWDRgm#DETRAC-Images/MVI_40855/
+  partition: unassigned
+  attributes:
+    split_original: test
+    weather: cloudy
+    camera_state: stable
+    site_proxy: MVI_4085
+    frames_annotated: 1090
+    frames_images: 1090
+    tracks: 55
+    mean_density: 27.61
+    occluded_fraction: 0.472
+    subset_version: v1
+  used_by:
+  - O2
+  - O3
+  - KPI-1
+  - KPI-4
+  - KPI-5
+  - NT-1
+  - NT-2
+  - NT-4
+- id: MVI_40864
+  file: raw/ua_detrac/images/MVI_40864
+  sha256: cfa12514eedf693eac23140bdbf5b7e28fed320aa51588e34667720b5b9bbedf
+  size_bytes: 110821279
+  source_ref: gdrive:1fQC6CEWOeL9pnJ4ZdD7U2gromcnWDRgm#DETRAC-Images/MVI_40864/
+  partition: unassigned
+  attributes:
+    split_original: test
+    weather: rainy
+    camera_state: stable
+    site_proxy: MVI_4086
+    frames_annotated: 1515
+    frames_images: 1515
+    tracks: 81
+    mean_density: 29.5
+    occluded_fraction: 0.486
+    subset_version: v1
+  used_by:
+  - O2
+  - O3
+  - KPI-1
+  - KPI-4
+  - KPI-5
+  - NT-1
+  - NT-2
+  - NT-4
+- id: MVI_40871
+  file: raw/ua_detrac/images/MVI_40871
+  sha256: 6230fb8c1ac3e191392551fbebc0e37727c59efc91a8ccc1ffcf0ebeebd9c736
+  size_bytes: 125858796
+  source_ref: gdrive:1fQC6CEWOeL9pnJ4ZdD7U2gromcnWDRgm#DETRAC-Images/MVI_40871/
+  partition: unassigned
+  attributes:
+    split_original: train
+    weather: rainy
+    camera_state: unstable
+    site_proxy: MVI_4087
+    frames_annotated: 1720
+    frames_images: 1720
+    tracks: 37
+    mean_density: 21.29
+    occluded_fraction: 0.519
+    subset_version: v1
+  used_by:
+  - O2
+  - O3
+  - KPI-1
+  - KPI-4
+  - KPI-5
+  - NT-1
+  - NT-2
+  - NT-4
+- id: MVI_40963
+  file: raw/ua_detrac/images/MVI_40963
+  sha256: 3dca23f97ba52debd9fcd7d9a16805f9c6dd8bffd668015ed8a50c36e26271b1
+  size_bytes: 95372352
+  source_ref: gdrive:1fQC6CEWOeL9pnJ4ZdD7U2gromcnWDRgm#DETRAC-Images/MVI_40963/
+  partition: unassigned
+  attributes:
+    split_original: train
+    weather: night
+    camera_state: stable
+    site_proxy: MVI_4096
+    frames_annotated: 1820
+    frames_images: 1820
+    tracks: 144
+    mean_density: 6.4
+    occluded_fraction: 0.152
+    subset_version: v1
+  used_by:
+  - O2
+  - O3
+  - KPI-1
+  - KPI-4
+  - KPI-5
+  - NT-1
+  - NT-2
+  - NT-4
+- id: MVI_41063
+  file: raw/ua_detrac/images/MVI_41063
+  sha256: 52004208a5d1fa3b19794fc90537199154a3f184cb5aa4e2a97d6ccdcfb417c2
+  size_bytes: 85526784
+  source_ref: gdrive:1fQC6CEWOeL9pnJ4ZdD7U2gromcnWDRgm#DETRAC-Images/MVI_41063/
+  partition: unassigned
+  attributes:
+    split_original: train
+    weather: sunny
+    camera_state: stable
+    site_proxy: MVI_4106
+    frames_annotated: 1505
+    frames_images: 1505
+    tracks: 167
+    mean_density: 6.68
+    occluded_fraction: 0.282
+    subset_version: v1
+  used_by:
+  - O2
+  - O3
+  - KPI-1
+  - KPI-4
+  - KPI-5
+  - NT-1
+  - NT-2
+  - NT-4
+- id: MVI_63553
+  file: raw/ua_detrac/images/MVI_63553
+  sha256: 4ff8533df51ce19109639c0d5cd6dd68f6cce0f6fc35b308ccd1cd8e8da066e7
+  size_bytes: 100956383
+  source_ref: gdrive:1fQC6CEWOeL9pnJ4ZdD7U2gromcnWDRgm#DETRAC-Images/MVI_63553/
+  partition: unassigned
+  attributes:
+    split_original: train
+    weather: rainy
+    camera_state: unstable
+    site_proxy: MVI_6355
+    frames_annotated: 1405
+    frames_images: 1405
+    tracks: 190
+    mean_density: 7.67
+    occluded_fraction: 0.444
+    subset_version: v1
+  used_by:
+  - O2
+  - O3
+  - KPI-1
+  - KPI-4
+  - KPI-5
+  - NT-1
+  - NT-2
+  - NT-4

@@ -1,0 +1,25 @@
+# UA-DETRAC first subset (approved 2026-11-23, budget ~1.5 GB, ~75 KB/frame).
+# Chosen from the parsed XML statistics (frames, tracks, mean density, occluded-object fraction) to balance
+# conditions and include sparse, dense and heavily occluded scenes. Each sequence comes from a different site proxy
+# (first four digits of the ID) except where noted, so partitioning by site stays possible.
+version: v1
+sequences:
+  # name:      [split, weather, frames, tracks, mean_density, occluded_fraction]  (informational, from XML)
+  night:
+    - MVI_40742   # test,  1655 f, density 15.2, occluded 0.54 (dense + occlusion at night)
+    - MVI_40963   # train, 1820 f, 144 tracks
+    - MVI_39781   # train, 1861 f, occluded 0.33
+  rainy:
+    - MVI_40864   # test,  1515 f, density 29.5 (very dense)
+    - MVI_63553   # train, 1405 f, 190 tracks, unstable camera
+    - MVI_40871   # train, 1720 f, density 21.3, occluded 0.52
+  cloudy:
+    - MVI_40855   # test,  1090 f, density 27.6
+    - MVI_40171   # train, 1150 f, occluded 0.64
+    - MVI_40201   # train,  925 f, 127 tracks
+    - MVI_40141   # train, 1600 f, sparse (density 3.9)
+  sunny:
+    - MVI_20011   # train,  664 f
+    - MVI_39311   # test,  1505 f, occluded 0.39
+    - MVI_41063   # train, 1505 f, 167 tracks
+    - MVI_39051   # test,  1051 f, sparse (density 2.3)

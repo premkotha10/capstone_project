@@ -1,0 +1,92 @@
+[
+ {
+  "phase": 1,
+  "title": "PDF analysis & requirements extraction",
+  "objective": "O1",
+  "status": "drafted, awaiting review"
+ },
+ {
+  "phase": 2,
+  "title": "Dataset research & selection",
+  "objective": "O1",
+  "status": "drafted, awaiting review"
+ },
+ {
+  "phase": 3,
+  "title": "Architecture & technical design",
+  "objective": "O1",
+  "status": "drafted, awaiting review"
+ },
+ {
+  "phase": 4,
+  "title": "Environment & project structure",
+  "objective": "O1",
+  "status": "done"
+ },
+ {
+  "phase": 5,
+  "title": "Video ingestion & detection",
+  "objective": "O2",
+  "status": "in progress"
+ },
+ {
+  "phase": 6,
+  "title": "Classification & tracking",
+  "objective": "O2",
+  "status": "not started"
+ },
+ {
+  "phase": 7,
+  "title": "Traffic volume estimation",
+  "objective": "O2",
+  "status": "not started"
+ },
+ {
+  "phase": 8,
+  "title": "Perspective correction",
+  "objective": "O2",
+  "status": "not started"
+ },
+ {
+  "phase": 9,
+  "title": "Adverse-condition improvement (O3)",
+  "objective": "O3",
+  "status": "not started"
+ },
+ {
+  "phase": 10,
+  "title": "Congestion forecasting",
+  "objective": "O4",
+  "status": "not started"
+ },
+ {
+  "phase": 11,
+  "title": "FastAPI backend",
+  "objective": "O4",
+  "status": "not started"
+ },
+ {
+  "phase": 12,
+  "title": "Streamlit dashboard",
+  "objective": "O4",
+  "status": "not started"
+ },
+ {
+  "phase": 13,
+  "title": "System integration",
+  "objective": "O4",
+  "status": "not started"
+ },
+ {
+  "phase": 14,
+  "title": "Testing, acceptance & performance",
+  "objective": "O5",
+  "status": "not started"
+ },
+ {
+  "phase": 15,
+  "title": "Documentation & demo",
+  "objective": "O5",
+  "status": "not started"
+ }
+]

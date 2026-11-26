@@ -1,0 +1,15 @@
+# Barbados first subset (approved 2026-11-23, budget ~1.6 GB).
+# 4 windows x 4 cameras x 23 minutes. 23 minutes = the challenge protocol: 15 min input + 2 min embargo + 5 min target.
+#
+# TIME BASE: `start` is the time encoded in the FILE NAME. Inspection of the burned-in camera overlay shows the
+# overlay (local Barbados time, AST = UTC-4) is 4 h behind the file name on every clip checked
+# (06:00:45 -> 02:00:54, 13:13:45 -> 09:13:44), so file names appear to be UTC. `local_offset_hours` records this.
+# Condition hints derive from LOCAL clock time only; light/rain labels are assigned later by inspection.
+version: v1
+local_offset_hours: -4
+cameras: [normanniles1, normanniles2, normanniles3, normanniles4]
+windows:
+  - {name: d21_local0200, start: "2025-10-21 06:00:00", minutes: 23, condition_hint: night}
+  - {name: d21_local0900, start: "2025-10-21 13:00:00", minutes: 23, condition_hint: morning_peak}
+  - {name: d21_local1337, start: "2025-10-21 17:37:00", minutes: 23, condition_hint: midday}
+  - {name: d24_local0230, start: "2025-10-24 06:30:00", minutes: 23, condition_hint: night}

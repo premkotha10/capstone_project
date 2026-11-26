@@ -1,0 +1,8 @@
+# Phase 4: only the test service exists. `api` (Phase 11) and `dashboard` (Phase 12) are added when implemented.
+services:
+  tests:
+    build: .
+    volumes:
+      - ${DSCI41_DATA_ROOT:-./data}:/data:ro
+      - ${DSCI41_MODELS_ROOT:-./models}:/models
+    command: ["python", "-m", "pytest", "-q"]

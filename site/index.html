@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Roadside Traffic Intelligence</title>
+<meta name="description" content="DSCI-41 capstone: vehicle counting and short-term congestion forecasting from roadside video. Results from real pipeline runs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Archivo:wght@600;700&display=swap">
+<style>
+/* Layout: a single reading column with full-width result bands; road-sign palette (asphalt, signal amber, lane white). */
+:root {
+  --bg: #F4F5F2; --panel: #FFFFFF; --ink: #15191C; --muted: #5A646C; --line: #D9DDD8;
+  --asphalt: #262B2F; --amber: #E8A317; --amber-ink: #7A5200; --teal: #0E6E7E;
+  --car: #0E6E7E; --truck: #B5487B; --bus: #3C8D4F; --motorcycle: #D98A00; --bicycle: #5AA9D6; --other: #8A9197;
+  --ok: #2F7D4A; --warn: #A56A00; --bad: #B3261E;
+  --display: 'Archivo', 'Segoe UI', sans-serif; --body: 'IBM Plex Sans', 'Segoe UI', sans-serif; --mono: 'IBM Plex Mono', Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111416; --panel: #191D20; --ink: #E9ECEA; --muted: #9BA5AC; --line: #2C3236;
+  --asphalt: #0B0D0E; --amber: #F2B53A; --amber-ink: #F2B53A; --teal: #46B3C2;
+  --car: #46B3C2; --truck: #E07AAA; --bus: #6CC384; --motorcycle: #F2B53A; --bicycle: #8CC7EA; --other: #A0A8AE;
+  --ok: #6CC384; --warn: #F2B53A; --bad: #F28B82; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #111416; --panel: #191D20; --ink: #E9ECEA; --muted: #9BA5AC; --line: #2C3236;
+  --asphalt: #0B0D0E; --amber: #F2B53A; --amber-ink: #F2B53A; --teal: #46B3C2;
+  --car: #46B3C2; --truck: #E07AAA; --bus: #6CC384; --motorcycle: #F2B53A; --bicycle: #8CC7EA; --other: #A0A8AE;
+  --ok: #6CC384; --warn: #F2B53A; --bad: #F28B82; color-scheme: dark; }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 var(--body); }
+a { color: var(--teal); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.hero { background: var(--asphalt); color: #F1F2EE; padding-block: 56px 40px; position: relative; overflow: hidden; }
+.hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 18px; height: 6px;
+  background: repeating-linear-gradient(90deg, #F1F2EE 0 46px, transparent 46px 86px); opacity: .55; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--amber); }
+h1 { font: 700 clamp(30px, 5vw, 52px)/1.05 var(--display); margin: 14px 0 16px; letter-spacing: -0.01em; text-wrap: balance; max-width: 18ch; }
+.hero p { max-width: 62ch; color: #C9CEC9; margin: 0 0 22px; }
+.hero .links { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 6px; font: 500 14px var(--body); text-decoration: none; border: 1px solid #4A5157; color: #F1F2EE; }
+.btn.primary { background: var(--amber); border-color: var(--amber); color: #1B1405; }
+.btn:focus-visible, select:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+.notice { margin-top: 26px; display: flex; gap: 10px; align-items: flex-start; max-width: 70ch; font-size: 14px; color: #E9DDBF; }
+.notice b { color: var(--amber); }
+main section { padding-block: 44px 8px; }
+h2 { font: 700 clamp(22px, 3vw, 30px)/1.15 var(--display); margin: 0 0 8px; text-wrap: balance; }
+.lede { color: var(--muted); max-width: 66ch; margin: 0 0 22px; }
+.grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); }
+.grid-2 { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px; min-width: 0; }
+.stat .k { font: 500 12px var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.stat .v { font: 700 34px/1.1 var(--display); font-variant-numeric: tabular-nums; margin-top: 6px; }
+.stat .s { color: var(--muted); font-size: 13px; }
+.flow { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; margin: 0; counter-reset: s; }
+.flow li { flex: 1 1 140px; background: var(--panel); border: 1px solid var(--line); border-top: 3px solid var(--line); border-radius: 8px; padding: 12px; min-width: 0; }
+.flow li[data-s="built"] { border-top-color: var(--ok); }
+.flow li[data-s="next"] { border-top-color: var(--amber); }
+.flow b { display: block; font-weight: 600; }
+.flow span { color: var(--muted); font-size: 13px; }
+.chip { display: inline-block; font: 500 11px var(--mono); text-transform: uppercase; letter-spacing: .05em; padding: 2px 8px; border-radius: 99px; border: 1px solid currentColor; }
+.chip.ok { color: var(--ok); } .chip.warn { color: var(--warn); } .chip.bad { color: var(--bad); } .chip.muted { color: var(--muted); }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.tab { background: transparent; border: 1px solid var(--line); color: var(--ink); padding: 8px 12px; border-radius: 6px; font: 500 14px var(--body); cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart text { fill: var(--muted); font: 12px var(--body); }
+.chart .val { fill: var(--ink); font-variant-numeric: tabular-nums; }
+.tip { position: absolute; pointer-events: none; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px; font-size: 12px; box-shadow: 0 6px 18px rgba(0,0,0,.15); white-space: nowrap; z-index: 3; }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px; color: var(--muted); margin-top: 8px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font: 500 12px var(--mono); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+td.r, th.r { text-align: right; }
+.finding { border-left: 4px solid var(--amber); }
+.finding h3 { margin: 0 0 6px; font: 600 18px var(--body); }
+.list { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; max-width: 72ch; }
+.phases { display: grid; gap: 6px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); list-style: none; margin: 0; padding: 0; }
+.phases li { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: grid; gap: 4px; }
+.phases .n { font: 500 12px var(--mono); color: var(--muted); }
+footer { padding-block: 40px 56px; color: var(--muted); font-size: 13px; }
+.muted { color: var(--muted); }
+small.src { display: block; color: var(--muted); font-size: 12px; margin-top: 10px; }
+@media (prefers-reduced-motion: no-preference) { .bar { transition: width .5s ease; } }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">KL University capstone · DSCI-41 · Visual Intelligence Systems</div>
+    <h1>Roadside video in, traffic counts and forecasts out</h1>
+    <p>A computer-vision pipeline that detects, tracks and counts vehicles from fixed roadside cameras, flags results it should not be trusted on (night, rain, dense occlusion), and forecasts the next few minutes of traffic.</p>
+    <div class="links">
+      <a class="btn primary" id="repo-link" href="https://github.com/Pavansailahar/Traffic-Volume-Estimation-and-Short-Term-Congestion-Forecasting-from-Roadside-Video">Source code on GitHub</a>
+      <a class="btn" href="#results">See the results</a>
+    </div>
+    <div class="notice"><span aria-hidden="true">⚠</span><span><b>Work in progress, results not yet validated.</b> Every number on this page comes from real pipeline runs, but counting accuracy has not been measured against human reference counts yet. Video frames are not shown: the source footage carries a re-use restriction.</span></div>
+  </div>
+</header>
+
+<main>
+  <section class="wrap" id="pipeline">
+    <h2>How it works</h2>
+    <p class="lede">Each stage is a separate, tested module. Green stages run today; amber ones are the next phases of the project.</p>
+    <ol class="flow">
+      <li data-s="built"><b>Ingest &amp; validate</b><span>MP4/AVI checks, checksums, corrupt-file rejection</span></li>
+      <li data-s="built"><b>Detect</b><span>YOLO11n, car · bus · truck · motorcycle · bicycle</span></li>
+      <li data-s="built"><b>Track</b><span>ByteTrack identities and trajectories</span></li>
+      <li data-s="built"><b>Count</b><span>Virtual lines, direction, one count per vehicle</span></li>
+      <li data-s="built"><b>Condition check</b><span>Night, blur, low contrast, dense occlusion → degraded</span></li>
+      <li data-s="next"><b>Perspective</b><span>Homography, ground-plane counting</span></li>
+      <li data-s="next"><b>Robustness (O3)</b><span>Occlusion, rain and low-light improvements</span></li>
+      <li data-s="next"><b>Congestion model</b><span>Labelled 5-minute-ahead congestion</span></li>
+    </ol>
+  </section>
+
+  <section class="wrap" id="results">
+    <h2>Results from real video</h2>
+    <p class="lede">Three runs: 23 minutes of a Barbados roundabout camera in morning peak and at night, and a 20-second clip of a congested expressway.</p>
+    <div class="tabs" role="tablist" id="run-tabs"></div>
+    <div class="grid" id="run-stats"></div>
+    <div class="grid-2" style="margin-top:16px">
+      <div class="card"><h3 style="margin:0 0 4px;font-size:16px">Vehicles per minute</h3><div class="muted" style="font-size:13px" id="minute-note"></div><div class="chart" id="minute-chart" style="min-height:220px"></div><div class="legend" id="minute-legend"></div></div>
+      <div class="card"><h3 style="margin:0 0 4px;font-size:16px">Vehicle mix (counted)</h3><div class="muted" style="font-size:13px">Class = majority vote over each vehicle's track</div><div class="chart" id="class-chart" style="min-height:160px"></div>
+        <h3 style="margin:18px 0 4px;font-size:16px">Conditions the system saw</h3><div class="chart" id="cond-chart" style="min-height:60px"></div></div>
+    </div>
+    <small class="src" id="run-src"></small>
+  </section>
+
+  <section class="wrap" id="finding">
+    <h2>What the expressway clip revealed</h2>
+    <div class="card finding">
+      <h3>Two counting lines, same total, different vehicles</h3>
+      <p class="muted" style="margin:0 0 14px;max-width:70ch">Motorcycles filter between queued cars and stay hidden until they are already past the upper line, so the tracker never sees them cross it. The totals barely differ, yet one line misses every motorcycle and the other misses every bus and truck. This is why the project reports results per vehicle class, never only in aggregate.</p>
+      <div class="scroll"><table id="finding-table"></table></div>
+    </div>
+  </section>
+
+  <section class="wrap" id="day-night">
+    <h2>Morning peak versus night</h2>
+    <p class="lede">The same camera, the same 23-minute length. At night every frame is flagged, so the counts are labelled degraded instead of being reported as normal.</p>
+    <div class="scroll card"><table id="compare-table"></table></div>
+  </section>
+
+  <section class="wrap" id="forecast">
+    <h2>Short-term outlook</h2>
+    <p class="lede">Vehicles entering the roundabout per minute, with the next five minutes predicted by the baseline that had the lowest one-minute backtest error. Congestion classes need the challenge's labelled data, so only volume is forecast here.</p>
+    <div class="grid-2">
+      <div class="card"><div class="chart" id="forecast-chart" style="min-height:240px"></div><div class="legend"><span><i style="background:var(--teal)"></i>Estimated from video</span><span><i style="background:var(--amber)"></i>Predicted</span></div></div>
+      <div class="card"><h3 style="margin:0 0 8px;font-size:16px">Backtest error (vehicles/min, MAE)</h3><div class="scroll"><table id="backtest-table"></table></div><small class="src">Rolling-origin backtest within the window. Only 23 points: illustrative, not a model evaluation.</small></div>
+    </div>
+  </section>
+
+  <section class="wrap" id="performance">
+    <h2>Speed on a laptop CPU</h2>
+    <p class="lede">Intel Core Ultra 9, no GPU. The 960×540 Barbados video is processed about twice as fast as real time; the 4K clip about a third of real time.</p>
+    <div class="card"><div class="chart" id="latency-chart" style="min-height:180px"></div><small class="src">Median and 95th-percentile time per processed frame, by stage. Measured with other jobs running, so these are not final latency figures.</small></div>
+  </section>
+
+  <section class="wrap" id="status">
+    <h2>Project status</h2>
+    <p class="lede" id="status-lede"></p>
+    <ol class="phases" id="phases"></ol>
+  </section>
+
+  <section class="wrap" id="limits">
+    <h2>What is not established yet</h2>
+    <ul class="list">
+      <li><b>Accuracy.</b> No counting accuracy is claimed. A blind hand-counting protocol, a fixed 17-clip plan and a counting tool are ready; two people must count each clip.</li>
+      <li><b>Congestion levels.</b> The labelled congestion data requires sign-in to the challenge platform; until it is loaded, only traffic volume is forecast.</li>
+      <li><b>Robustness gains (O3).</b> Night, rain and occlusion improvements are the next phase and will be judged only by measured gains on the same data and hardware.</li>
+      <li><b>Condition thresholds.</b> The night, blur and occlusion flags use provisional thresholds that still need calibration.</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>DSCI-41 capstone · code licensed AGPL-3.0 · <a id="repo-link-2" href="https://github.com/Pavansailahar/Traffic-Volume-Estimation-and-Short-Term-Congestion-Forecasting-from-Roadside-Video">GitHub repository</a></div>
+  <div id="generated"></div>
+</footer>
+
+<script>
+(() => {
+  const CLASS_ORDER = ['car', 'bus', 'truck', 'motorcycle', 'bicycle', 'other'];
+  const MOVE_LABEL = {
+    'approach:entering': 'Entering roundabout', 'approach:exiting': 'Leaving roundabout',
+    'circulating_west:eastbound': 'Ring road, eastbound', 'circulating_west:westbound': 'Ring road, westbound',
+    'carriageway:toward_camera': 'Upper line, toward camera', 'carriageway_low:toward_camera': 'Lower line, toward camera',
+  };
+  const MOVE_COLOR = ['var(--teal)', 'var(--amber)', 'var(--bus)', 'var(--truck)'];
+  const fmt = new Intl.NumberFormat('en');
+  const f1 = new Intl.NumberFormat('en', { maximumFractionDigits: 1, minimumFractionDigits: 1 });
+  const pct = (x) => `${Math.round(x * 100)}%`;
+  const label = (m) => MOVE_LABEL[m] || m.replace(/_/g, ' ').replace(':', ' · ');
+  const el = (tag, attrs = {}, text) => { const e = document.createElementNS(tag === 'div' ? 'http://www.w3.org/1999/xhtml' : 'http://www.w3.org/2000/svg', tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); if (text != null) e.textContent = text; return e; };
+  const h = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
+
+  function tipFor(box) {
+    let t = box.querySelector('.tip'); if (!t) { t = h('div', null, 'tip'); t.hidden = true; box.appendChild(t); }
+    return { show(ev, text) { t.textContent = text; t.hidden = false; const r = box.getBoundingClientRect(); t.style.left = Math.max(0, Math.min(ev.clientX - r.left + 12, r.width - t.offsetWidth)) + 'px'; t.style.top = (ev.clientY - r.top + 12) + 'px'; }, hide() { t.hidden = true; } };
+  }
+  function measure(svg, text, cls) { const t = el('text', cls ? { class: cls } : {}, text); svg.appendChild(t); const w = t.getComputedTextLength(); t.remove(); return w; }
+
+  function hbars(box, rows, aria) { // rows: [{label, value, color, tip}]
+    box.replaceChildren();
+    const W = Math.max(box.clientWidth, 280), bh = 22, gap = 9, H = rows.length * (bh + gap);
+    const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': aria }); box.appendChild(svg);
+    const lw = Math.max(...rows.map((r) => measure(svg, r.label)), 40), vw = Math.max(...rows.map((r) => measure(svg, fmt.format(r.value), 'val')), 20);
+    const max = Math.max(...rows.map((r) => r.value), 1), span = Math.max(W - lw - vw - 26, 20), tip = tipFor(box);
+    rows.forEach((r, i) => {
+      const y = i * (bh + gap), w = Math.max((r.value / max) * span, r.value ? 2 : 0);
+      svg.appendChild(el('text', { x: lw, y: y + bh / 2, 'dominant-baseline': 'middle', 'text-anchor': 'end' }, r.label));
+      const rect = el('rect', { x: lw + 8, y, width: w, height: bh, rx: 3, style: `fill:${r.color}` });
+      rect.addEventListener('pointermove', (ev) => tip.show(ev, r.tip)); rect.addEventListener('pointerleave', () => tip.hide());
+      svg.appendChild(rect);
+      svg.appendChild(el('text', { x: lw + 14 + w, y: y + bh / 2, 'dominant-baseline': 'middle', class: 'val' }, fmt.format(r.value)));
+    });
+  }
+
+  function stacked(box, legendBox, perMinute, movements, aria) {
+    box.replaceChildren(); legendBox.replaceChildren();
+    const W = Math.max(box.clientWidth, 280), H = 220, m = { l: 34, r: 8, t: 10, b: 26 };
+    const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': aria }); box.appendChild(svg);
+    const totals = perMinute.map((p) => movements.reduce((s, k) => s + (p[k] || 0), 0));
+    const max = Math.max(...totals, 1), step = max > 40 ? 20 : max > 10 ? 5 : max > 4 ? 2 : 1, top = Math.ceil(max / step) * step;
+    const y = (v) => m.t + (H - m.t - m.b) * (1 - v / top), n = perMinute.length, bw = (W - m.l - m.r) / n, tip = tipFor(box);
+    for (let v = 0; v <= top; v += step) { svg.appendChild(el('line', { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), style: 'stroke:var(--line)' })); svg.appendChild(el('text', { x: m.l - 6, y: y(v), 'text-anchor': 'end', 'dominant-baseline': 'middle' }, v)); }
+    perMinute.forEach((p, i) => {
+      const x = m.l + i * bw;
+      if (p.degraded) svg.appendChild(el('rect', { x, y: m.t, width: bw, height: H - m.t - m.b, style: 'fill:var(--amber);opacity:.13' }));
+      let acc = 0;
+      movements.forEach((k, j) => { const v = p[k] || 0; if (!v) return; const r = el('rect', { x: x + bw * 0.14, y: y(acc + v), width: bw * 0.72, height: y(acc) - y(acc + v), style: `fill:${MOVE_COLOR[j % MOVE_COLOR.length]}` }); r.addEventListener('pointermove', (ev) => tip.show(ev, `Minute ${p.minute + 1}: ${label(k)} ${v}${p.degraded ? ' (degraded)' : ''}`)); r.addEventListener('pointerleave', () => tip.hide()); svg.appendChild(r); acc += v; });
+      if (n <= 30 && (i % (n > 12 ? 4 : 1) === 0)) svg.appendChild(el('text', { x: x + bw / 2, y: H - 8, 'text-anchor': 'middle' }, p.minute + 1));
+    });
+    movements.forEach((k, j) => { const s = h('span'); const i = h('i'); i.style.background = MOVE_COLOR[j % MOVE_COLOR.length]; s.append(i, label(k)); legendBox.appendChild(s); });
+    if (perMinute.some((p) => p.degraded)) { const s = h('span'); const i = h('i'); i.style.background = 'var(--amber)'; i.style.opacity = '.35'; s.append(i, 'Minute contains degraded-condition counts'); legendBox.appendChild(s); }
+  }
+
+  function lineChart(box, observed, predicted, aria) {
+    box.replaceChildren();
+    const W = Math.max(box.clientWidth, 280), H = 240, m = { l: 34, r: 12, t: 12, b: 26 };
+    const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': aria }); box.appendChild(svg);
+    const all = [...observed, ...predicted], max = Math.max(...all, 1), step = max > 20 ? 10 : 5, top = Math.ceil(max / step) * step, n = observed.length + predicted.length;
+    const x = (i) => m.l + (W - m.l - m.r) * (i / (n - 1)), y = (v) => m.t + (H - m.t - m.b) * (1 - v / top), tip = tipFor(box);
+    for (let v = 0; v <= top; v += step) { svg.appendChild(el('line', { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), style: 'stroke:var(--line)' })); svg.appendChild(el('text', { x: m.l - 6, y: y(v), 'text-anchor': 'end', 'dominant-baseline': 'middle' }, v)); }
+    svg.appendChild(el('rect', { x: x(observed.length - 1), y: m.t, width: x(n - 1) - x(observed.length - 1), height: H - m.t - m.b, style: 'fill:var(--amber);opacity:.08' }));
+    const path = (pts, color, dash) => svg.appendChild(el('polyline', { points: pts.map(([i, v]) => `${x(i)},${y(v)}`).join(' '), style: `fill:none;stroke:${color};stroke-width:2;${dash ? 'stroke-dasharray:5 4' : ''}` }));
+    path(observed.map((v, i) => [i, v]), 'var(--teal)');
+    path([[observed.length - 1, observed[observed.length - 1]], ...predicted.map((v, i) => [observed.length + i, v])], 'var(--amber)', true);
+    [...observed.map((v, i) => [i, v, 'Estimated']), ...predicted.map((v, i) => [observed.length + i, v, 'Predicted'])].forEach(([i, v, kind]) => {
+      const c = el('circle', { cx: x(i), cy: y(v), r: 3.5, style: `fill:${kind === 'Estimated' ? 'var(--teal)' : 'var(--amber)'}` });
+      c.addEventListener('pointermove', (ev) => tip.show(ev, `Minute ${i + 1}: ${kind} ${f1.format(v)} vehicles`)); c.addEventListener('pointerleave', () => tip.hide()); svg.appendChild(c);
+    });
+    [0, observed.length - 1, n - 1].forEach((i) => svg.appendChild(el('text', { x: x(i), y: H - 8, 'text-anchor': 'middle' }, `min ${i + 1}`)));
+  }
+
+  function table(tbl, head, rows, rightCols = []) {
+    tbl.replaceChildren(); const thead = h('thead'), tr = h('tr');
+    head.forEach((c, i) => tr.appendChild(h('th', c, rightCols.includes(i) ? 'r' : ''))); thead.appendChild(tr); tbl.appendChild(thead);
+    const tb = h('tbody'); rows.forEach((r) => { const row = h('tr'); r.forEach((c, i) => row.appendChild(h('td', c, rightCols.includes(i) ? 'r' : ''))); tb.appendChild(row); }); tbl.appendChild(tb);
+  }
+
+  function stat(k, v, s) { const c = h('div', null, 'card stat'); c.append(h('div', k, 'k'), h('div', v, 'v'), h('div', s, 's')); return c; }
+
+  let DATA = null, current = 0;
+  function renderRun() {
+    const r = DATA.runs[current];
+    document.querySelectorAll('.tab').forEach((t, i) => t.setAttribute('aria-selected', String(i === current)));
+    const stats = document.getElementById('run-stats'); stats.replaceChildren(
+      stat('Vehicles counted', fmt.format(r.vehicles_counted), `${f1.format(r.minutes)} min of video`),
+      stat('Flow', fmt.format(r.flow_per_hour), 'vehicles per hour, all lines'),
+      stat('Tracks', fmt.format(r.tracks), `${fmt.format(r.moving_tracks)} moving · ${fmt.format(r.stationary_tracks)} stationary`),
+      stat('Speed', `${f1.format(r.realtime_factor)}×`, `real time · ${f1.format(r.throughput_fps)} frames/s`));
+    const movements = Object.keys(r.counts_by_movement);
+    document.getElementById('minute-note').textContent = r.per_minute.length > 1 ? 'Hover a bar for details' : 'This clip is shorter than one minute';
+    stacked(document.getElementById('minute-chart'), document.getElementById('minute-legend'), r.per_minute, movements, `Vehicles per minute for ${r.label}`);
+    const total = Object.values(r.counts_by_class).reduce((a, b) => a + b, 0);
+    hbars(document.getElementById('class-chart'), CLASS_ORDER.filter((c) => r.counts_by_class[c]).map((c) => ({ label: c, value: r.counts_by_class[c], color: `var(--${c})`, tip: `${c}: ${fmt.format(r.counts_by_class[c])} (${pct(r.counts_by_class[c] / total)})` })), `Counted vehicles by class for ${r.label}`);
+    const cond = Object.entries(r.condition_share).sort((a, b) => b[1] - a[1]);
+    hbars(document.getElementById('cond-chart'), cond.map(([k, v]) => ({ label: k.replace(/_/g, ' ').replace('|', ' + '), value: Math.round(v * 100), color: k === 'nominal' ? 'var(--ok)' : 'var(--amber)', tip: `${pct(v)} of frames: ${k.replace(/_/g, ' ')}` })), `Share of frames per condition for ${r.label}`);
+    document.getElementById('run-src').textContent = `Source: pipeline run ${r.id} · model ${r.model} (sha256 ${r.model_sha256}…) · config ${r.config_hash} · condition values are % of processed frames`;
+  }
+
+  function render() {
+    const tabs = document.getElementById('run-tabs'); tabs.replaceChildren();
+    DATA.runs.forEach((r, i) => { const b = h('button', r.label, 'tab'); b.setAttribute('role', 'tab'); b.addEventListener('click', () => { current = i; renderRun(); }); tabs.appendChild(b); });
+    renderRun();
+
+    const sample = DATA.runs.find((r) => r.kind === 'sample');
+    if (sample) {
+      const lines = Object.keys(sample.counts_by_movement_and_class);
+      table(document.getElementById('finding-table'), ['Counting line', 'Car', 'Bus', 'Truck', 'Motorcycle', 'Total'],
+        lines.map((l) => { const c = sample.counts_by_movement_and_class[l]; const get = (k) => String(c[k] || 0); return [label(l), get('car'), get('bus'), get('truck'), get('motorcycle'), String(Object.values(c).reduce((a, b) => a + b, 0))]; }), [1, 2, 3, 4, 5]);
+    }
+
+    const bar = DATA.runs.filter((r) => r.kind === 'barbados');
+    const rows = [
+      ['Vehicles counted', ...bar.map((r) => fmt.format(r.vehicles_counted))],
+      ['Entering / leaving roundabout', ...bar.map((r) => `${r.counts_by_movement['approach:entering'] || 0} / ${r.counts_by_movement['approach:exiting'] || 0}`)],
+      ['Ring road eastbound / westbound', ...bar.map((r) => `${r.counts_by_movement['circulating_west:eastbound'] || 0} / ${r.counts_by_movement['circulating_west:westbound'] || 0}`)],
+      ['Frames flagged as degraded', ...bar.map((r) => pct(r.degraded_frame_share))],
+      ['Main flag', ...bar.map((r) => Object.entries(r.condition_share).filter(([k]) => k !== 'nominal').sort((a, b) => b[1] - a[1]).map(([k]) => k.replace(/_/g, ' '))[0] || 'none')],
+      ['Median detector confidence', ...bar.map((r) => r.median_confidence?.toFixed(2) ?? '—')],
+      ['Tracks / moving tracks', ...bar.map((r) => `${fmt.format(r.tracks)} / ${fmt.format(r.moving_tracks)}`)],
+    ];
+    table(document.getElementById('compare-table'), ['', ...bar.map((r) => r.label.split('· ')[1] || r.label)], rows, [1, 2]);
+
+    const fr = DATA.runs.find((r) => r.forecast && r.id.includes('morning'))?.forecast;
+    if (fr) {
+      lineChart(document.getElementById('forecast-chart'), fr.observed, fr.predicted_next_5, 'Entering vehicles per minute with a five-minute forecast');
+      const models = [...new Set(fr.backtest.map((b) => b.model))], hz = [...new Set(fr.backtest.map((b) => b.horizon))];
+      table(document.getElementById('backtest-table'), ['Model', ...hz.map((x) => `${x} min`)],
+        models.map((mdl) => [mdl.replace(/_/g, ' ') + (mdl === fr.best_model ? ' ★' : ''), ...hz.map((x) => { const b = fr.backtest.find((q) => q.model === mdl && q.horizon === x); return b ? b.mae.toFixed(2) : '—'; })]), hz.map((_, i) => i + 1));
+    }
+
+    const box = document.getElementById('latency-chart'); const stages = ['detect', 'monitor', 'track', 'count'];
+    box.replaceChildren();
+    const W = Math.max(box.clientWidth, 280), groups = DATA.runs, rowH = 18, gh = stages.length * rowH + 18, H = groups.length * gh;
+    const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'Median and 95th percentile time per frame by stage and run' }); box.appendChild(svg);
+    const max = Math.max(...groups.flatMap((g) => stages.map((s) => g.latency_ms[s]?.p95_ms || 0)), 1), lw = 170, span = W - lw - 80, tip = tipFor(box);
+    groups.forEach((g, gi) => {
+      const y0 = gi * gh; svg.appendChild(el('text', { x: 0, y: y0 + 10, class: 'val', 'font-weight': 600 }, g.label.split(' · ')[0] + ' · ' + (g.label.split(' · ')[1] || '')));
+      stages.forEach((s, si) => {
+        const L = g.latency_ms[s]; if (!L) return; const y = y0 + 16 + si * rowH;
+        svg.appendChild(el('text', { x: lw - 8, y: y + 6, 'text-anchor': 'end', 'dominant-baseline': 'middle' }, s));
+        const p95 = el('rect', { x: lw, y, width: Math.max(L.p95_ms / max * span, 1), height: 12, rx: 2, style: 'fill:var(--amber);opacity:.45' });
+        const p50 = el('rect', { x: lw, y, width: Math.max(L.p50_ms / max * span, 1), height: 12, rx: 2, style: 'fill:var(--teal)' });
+        [p95, p50].forEach((r) => { r.addEventListener('pointermove', (ev) => tip.show(ev, `${s}: median ${f1.format(L.p50_ms)} ms · p95 ${f1.format(L.p95_ms)} ms`)); r.addEventListener('pointerleave', () => tip.hide()); svg.append(r); });
+        svg.appendChild(el('text', { x: lw + L.p95_ms / max * span + 6, y: y + 6, 'dominant-baseline': 'middle', class: 'val' }, `${f1.format(L.p50_ms)} / ${f1.format(L.p95_ms)} ms`));
+      });
+    });
+
+    const done = DATA.phases.filter((p) => p.status === 'done').length, cur = DATA.phases.find((p) => p.status === 'in progress');
+    document.getElementById('status-lede').textContent = `${done} of ${DATA.phases.length} phases complete${cur ? `; phase ${cur.phase} (${cur.title.toLowerCase()}) is under way` : ''}. Hand-count reference: ${DATA.validation.clips_double_counted} of ${DATA.validation.plan_clips} planned clips counted.`;
+    const ph = document.getElementById('phases'); ph.replaceChildren();
+    DATA.phases.forEach((p) => { const li = h('li'); const kind = p.status === 'done' ? 'ok' : p.status === 'in progress' ? 'warn' : p.status.startsWith('drafted') ? 'warn' : 'muted'; li.append(h('span', `Phase ${p.phase} · ${p.objective}`, 'n'), h('b', p.title), h('span', p.status, `chip ${kind}`)); ph.appendChild(li); });
+    document.getElementById('generated').textContent = `Figures exported ${DATA.generated_utc.replace('T', ' ').replace('+00:00', ' UTC')} from the project's run records.`;
+  }
+
+  fetch('data/showcase.json').then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then((d) => { DATA = d; render(); })
+    .catch(() => { document.getElementById('run-stats').replaceChildren(h('p', 'The results file could not be loaded. Reload the page to try again.', 'muted')); });
+  let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => DATA && render(), 150); });
+})();
+</script>
+</body>
+</html>

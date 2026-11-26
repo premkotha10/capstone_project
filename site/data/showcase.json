@@ -1,0 +1,1230 @@
+{
+ "generated_utc": "2026-11-23T12:45:30+00:00",
+ "repository": "https://github.com/Pavansailahar/Traffic-Volume-Estimation-and-Short-Term-Congestion-Forecasting-from-Roadside-Video",
+ "validation": {
+  "plan_clips": 17,
+  "records": 0,
+  "clips_double_counted": 0,
+  "statement": "Counts are pipeline estimates. They have not yet been validated against human reference counts; the hand-counting protocol and tool are in place."
+ },
+ "phases": [
+  {
+   "phase": 1,
+   "title": "PDF analysis & requirements extraction",
+   "objective": "O1",
+   "status": "drafted, awaiting review"
+  },
+  {
+   "phase": 2,
+   "title": "Dataset research & selection",
+   "objective": "O1",
+   "status": "drafted, awaiting review"
+  },
+  {
+   "phase": 3,
+   "title": "Architecture & technical design",
+   "objective": "O1",
+   "status": "drafted, awaiting review"
+  },
+  {
+   "phase": 4,
+   "title": "Environment & project structure",
+   "objective": "O1",
+   "status": "done"
+  },
+  {
+   "phase": 5,
+   "title": "Video ingestion & detection",
+   "objective": "O2",
+   "status": "in progress"
+  },
+  {
+   "phase": 6,
+   "title": "Classification & tracking",
+   "objective": "O2",
+   "status": "not started"
+  },
+  {
+   "phase": 7,
+   "title": "Traffic volume estimation",
+   "objective": "O2",
+   "status": "not started"
+  },
+  {
+   "phase": 8,
+   "title": "Perspective correction",
+   "objective": "O2",
+   "status": "not started"
+  },
+  {
+   "phase": 9,
+   "title": "Adverse-condition improvement (O3)",
+   "objective": "O3",
+   "status": "not started"
+  },
+  {
+   "phase": 10,
+   "title": "Congestion forecasting",
+   "objective": "O4",
+   "status": "not started"
+  },
+  {
+   "phase": 11,
+   "title": "FastAPI backend",
+   "objective": "O4",
+   "status": "not started"
+  },
+  {
+   "phase": 12,
+   "title": "Streamlit dashboard",
+   "objective": "O4",
+   "status": "not started"
+  },
+  {
+   "phase": 13,
+   "title": "System integration",
+   "objective": "O4",
+   "status": "not started"
+  },
+  {
+   "phase": 14,
+   "title": "Testing, acceptance & performance",
+   "objective": "O5",
+   "status": "not started"
+  },
+  {
+   "phase": 15,
+   "title": "Documentation & demo",
+   "objective": "O5",
+   "status": "not started"
+  }
+ ],
+ "runs": [
+  {
+   "id": "cam1_2025-10-21_0900_morning",
+   "label": "Barbados camera 1 \u00b7 09:00 morning peak",
+   "kind": "barbados",
+   "minutes": 22.9,
+   "frames": 13775,
+   "stride": 2,
+   "source_fps": 20.0,
+   "throughput_fps": 19.43,
+   "realtime_factor": 1.94,
+   "vehicles_counted": 1659,
+   "flow_per_hour": 4337,
+   "counts_by_movement": {
+    "approach:entering": 364,
+    "approach:exiting": 464,
+    "circulating_west:eastbound": 831
+   },
+   "counts_by_class": {
+    "car": 1547,
+    "truck": 101,
+    "bus": 11
+   },
+   "counts_by_movement_and_class": {
+    "approach:entering": {
+     "car": 359,
+     "truck": 5
+    },
+    "approach:exiting": {
+     "bus": 4,
+     "car": 434,
+     "truck": 26
+    },
+    "circulating_west:eastbound": {
+     "bus": 7,
+     "car": 754,
+     "truck": 70
+    }
+   },
+   "tracks": 2715,
+   "moving_tracks": 1378,
+   "stationary_tracks": 268,
+   "fragment_share": 0.288,
+   "detections": 135222,
+   "median_confidence": 0.564,
+   "confidence_bins": [
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0
+   ],
+   "confidence_hist": {
+    "bicycle": [
+     1,
+     0,
+     0,
+     1,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "bus": [
+     1749,
+     1260,
+     796,
+     433,
+     220,
+     97,
+     66,
+     55,
+     41,
+     35,
+     56,
+     80,
+     93,
+     82,
+     1
+    ],
+    "car": [
+     9388,
+     7762,
+     7241,
+     7048,
+     7138,
+     6816,
+     7598,
+     8692,
+     9735,
+     10634,
+     11053,
+     11366,
+     7588,
+     359,
+     0
+    ],
+    "motorcycle": [
+     23,
+     16,
+     22,
+     21,
+     23,
+     18,
+     9,
+     7,
+     4,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "truck": [
+     3131,
+     3262,
+     3230,
+     2433,
+     1900,
+     1178,
+     766,
+     501,
+     376,
+     332,
+     313,
+     155,
+     16,
+     0,
+     0
+    ]
+   },
+   "condition_share": {
+    "dense_occlusion": 0.144,
+    "nominal": 0.856
+   },
+   "degraded_frame_share": 0.144,
+   "per_minute": [
+    {
+     "minute": 0,
+     "degraded": true,
+     "approach:entering": 14,
+     "approach:exiting": 21,
+     "circulating_west:eastbound": 37
+    },
+    {
+     "minute": 1,
+     "degraded": true,
+     "approach:entering": 13,
+     "approach:exiting": 18,
+     "circulating_west:eastbound": 36
+    },
+    {
+     "minute": 2,
+     "degraded": true,
+     "approach:entering": 22,
+     "approach:exiting": 28,
+     "circulating_west:eastbound": 36
+    },
+    {
+     "minute": 3,
+     "degraded": true,
+     "approach:entering": 12,
+     "approach:exiting": 25,
+     "circulating_west:eastbound": 40
+    },
+    {
+     "minute": 4,
+     "degraded": true,
+     "approach:entering": 17,
+     "approach:exiting": 20,
+     "circulating_west:eastbound": 42
+    },
+    {
+     "minute": 5,
+     "degraded": true,
+     "approach:entering": 14,
+     "approach:exiting": 16,
+     "circulating_west:eastbound": 34
+    },
+    {
+     "minute": 6,
+     "degraded": true,
+     "approach:entering": 20,
+     "approach:exiting": 24,
+     "circulating_west:eastbound": 37
+    },
+    {
+     "minute": 7,
+     "degraded": true,
+     "approach:entering": 17,
+     "approach:exiting": 14,
+     "circulating_west:eastbound": 31
+    },
+    {
+     "minute": 8,
+     "degraded": true,
+     "approach:entering": 21,
+     "approach:exiting": 24,
+     "circulating_west:eastbound": 40
+    },
+    {
+     "minute": 9,
+     "degraded": true,
+     "approach:entering": 16,
+     "approach:exiting": 18,
+     "circulating_west:eastbound": 30
+    },
+    {
+     "minute": 10,
+     "degraded": true,
+     "approach:entering": 13,
+     "approach:exiting": 21,
+     "circulating_west:eastbound": 35
+    },
+    {
+     "minute": 11,
+     "degraded": true,
+     "approach:entering": 13,
+     "approach:exiting": 19,
+     "circulating_west:eastbound": 37
+    },
+    {
+     "minute": 12,
+     "degraded": true,
+     "approach:entering": 13,
+     "approach:exiting": 15,
+     "circulating_west:eastbound": 39
+    },
+    {
+     "minute": 13,
+     "degraded": true,
+     "approach:entering": 20,
+     "approach:exiting": 21,
+     "circulating_west:eastbound": 37
+    },
+    {
+     "minute": 14,
+     "degraded": true,
+     "approach:entering": 21,
+     "approach:exiting": 24,
+     "circulating_west:eastbound": 40
+    },
+    {
+     "minute": 15,
+     "degraded": true,
+     "approach:entering": 14,
+     "approach:exiting": 21,
+     "circulating_west:eastbound": 34
+    },
+    {
+     "minute": 16,
+     "degraded": true,
+     "approach:entering": 19,
+     "approach:exiting": 31,
+     "circulating_west:eastbound": 37
+    },
+    {
+     "minute": 17,
+     "degraded": true,
+     "approach:entering": 9,
+     "approach:exiting": 19,
+     "circulating_west:eastbound": 39
+    },
+    {
+     "minute": 18,
+     "degraded": true,
+     "approach:entering": 15,
+     "approach:exiting": 16,
+     "circulating_west:eastbound": 34
+    },
+    {
+     "minute": 19,
+     "degraded": true,
+     "approach:entering": 23,
+     "approach:exiting": 19,
+     "circulating_west:eastbound": 39
+    },
+    {
+     "minute": 20,
+     "degraded": true,
+     "approach:entering": 15,
+     "approach:exiting": 8,
+     "circulating_west:eastbound": 26
+    },
+    {
+     "minute": 21,
+     "degraded": true,
+     "approach:entering": 14,
+     "approach:exiting": 18,
+     "circulating_west:eastbound": 32
+    },
+    {
+     "minute": 22,
+     "degraded": true,
+     "approach:entering": 9,
+     "approach:exiting": 24,
+     "circulating_west:eastbound": 39
+    }
+   ],
+   "forecast": {
+    "movement": "approach:entering",
+    "observed": [
+     14,
+     13,
+     22,
+     12,
+     17,
+     14,
+     20,
+     17,
+     21,
+     16,
+     13,
+     13,
+     13,
+     20,
+     21,
+     14,
+     19,
+     9,
+     15,
+     23,
+     15,
+     14,
+     9
+    ],
+    "best_model": "moving_average_5",
+    "predicted_next_5": [
+     15.2,
+     15.2,
+     15.2,
+     15.2,
+     15.2
+    ],
+    "backtest": [
+     {
+      "model": "persistence",
+      "horizon": 1,
+      "n": 18,
+      "mae": 4.556,
+      "rmse": 5.364
+     },
+     {
+      "model": "persistence",
+      "horizon": 2,
+      "n": 17,
+      "mae": 4.706,
+      "rmse": 5.941
+     },
+     {
+      "model": "persistence",
+      "horizon": 3,
+      "n": 16,
+      "mae": 5.062,
+      "rmse": 6.437
+     },
+     {
+      "model": "persistence",
+      "horizon": 5,
+      "n": 14,
+      "mae": 3.071,
+      "rmse": 3.789
+     },
+     {
+      "model": "moving_average_3",
+      "horizon": 1,
+      "n": 18,
+      "mae": 4.13,
+      "rmse": 4.976
+     },
+     {
+      "model": "moving_average_3",
+      "horizon": 2,
+      "n": 17,
+      "mae": 4.373,
+      "rmse": 5.257
+     },
+     {
+      "model": "moving_average_3",
+      "horizon": 3,
+      "n": 16,
+      "mae": 3.958,
+      "rmse": 4.768
+     },
+     {
+      "model": "moving_average_3",
+      "horizon": 5,
+      "n": 14,
+      "mae": 3.095,
+      "rmse": 3.48
+     },
+     {
+      "model": "moving_average_5",
+      "horizon": 1,
+      "n": 18,
+      "mae": 3.733,
+      "rmse": 4.363
+     },
+     {
+      "model": "moving_average_5",
+      "horizon": 2,
+      "n": 17,
+      "mae": 3.718,
+      "rmse": 4.306
+     },
+     {
+      "model": "moving_average_5",
+      "horizon": 3,
+      "n": 16,
+      "mae": 3.563,
+      "rmse": 4.111
+     },
+     {
+      "model": "moving_average_5",
+      "horizon": 5,
+      "n": 14,
+      "mae": 3.386,
+      "rmse": 4.027
+     },
+     {
+      "model": "linear_trend_5",
+      "horizon": 1,
+      "n": 18,
+      "mae": 5.172,
+      "rmse": 6.358
+     },
+     {
+      "model": "linear_trend_5",
+      "horizon": 2,
+      "n": 17,
+      "mae": 7.176,
+      "rmse": 8.153
+     },
+     {
+      "model": "linear_trend_5",
+      "horizon": 3,
+      "n": 16,
+      "mae": 7.806,
+      "rmse": 9.269
+     },
+     {
+      "model": "linear_trend_5",
+      "horizon": 5,
+      "n": 14,
+      "mae": 6.557,
+      "rmse": 7.634
+     }
+    ]
+   },
+   "latency_ms": {
+    "monitor": {
+     "p50_ms": 0.8,
+     "p95_ms": 1.2,
+     "p99_ms": 1.4
+    },
+    "detect": {
+     "p50_ms": 37.5,
+     "p95_ms": 76.9,
+     "p99_ms": 83.7
+    },
+    "track": {
+     "p50_ms": 1.6,
+     "p95_ms": 2.9,
+     "p99_ms": 3.3
+    },
+    "count": {
+     "p50_ms": 0.0,
+     "p95_ms": 0.1,
+     "p99_ms": 0.1
+    },
+    "total": {
+     "p50_ms": 44.8,
+     "p95_ms": 86.9,
+     "p99_ms": 94.2
+    }
+   },
+   "model": "yolo11n.pt",
+   "model_sha256": "0ebbc80d4a76",
+   "config_hash": "ee66888ccf4ac273"
+  },
+  {
+   "id": "cam1_2025-10-21_0200_night",
+   "label": "Barbados camera 1 \u00b7 02:00 night",
+   "kind": "barbados",
+   "minutes": 23.0,
+   "frames": 13780,
+   "stride": 2,
+   "source_fps": 20.0,
+   "throughput_fps": 17.7,
+   "realtime_factor": 1.77,
+   "vehicles_counted": 62,
+   "flow_per_hour": 162,
+   "counts_by_movement": {
+    "approach:entering": 3,
+    "approach:exiting": 23,
+    "circulating_west:eastbound": 36
+   },
+   "counts_by_class": {
+    "car": 62
+   },
+   "counts_by_movement_and_class": {
+    "approach:entering": {
+     "car": 3
+    },
+    "approach:exiting": {
+     "car": 23
+    },
+    "circulating_west:eastbound": {
+     "car": 36
+    }
+   },
+   "tracks": 176,
+   "moving_tracks": 57,
+   "stationary_tracks": 61,
+   "fragment_share": 0.21,
+   "detections": 6405,
+   "median_confidence": 0.314,
+   "confidence_bins": [
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0
+   ],
+   "confidence_hist": {
+    "car": [
+     512,
+     292,
+     246,
+     174,
+     187,
+     172,
+     183,
+     204,
+     217,
+     248,
+     295,
+     249,
+     97,
+     3,
+     0
+    ],
+    "truck": [
+     2290,
+     715,
+     249,
+     56,
+     10,
+     4,
+     2,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "condition_share": {
+    "night": 1.0
+   },
+   "degraded_frame_share": 1.0,
+   "per_minute": [
+    {
+     "minute": 0,
+     "degraded": true,
+     "approach:entering": 0,
+     "approach:exiting": 0,
+     "circulating_west:eastbound": 1
+    },
+    {
+     "minute": 1,
+     "degraded": true,
+     "approach:entering": 0,
+     "approach:exiting": 2,
+     "circulating_west:eastbound": 4
+    },
+    {
+     "minute": 2,
+     "degraded": true,
+     "approach:entering": 0,
+     "approach:exiting": 2,
+     "circulating_west:eastbound": 3
+    },
+    {
+     "minute": 3,
+     "degraded": false,
+     "approach:entering": 0,
+     "approach:exiting": 0,
+     "circulating_west:eastbound": 0
+    },
+    {
+     "minute": 4,
+     "degraded": true,
+     "approach:entering": 0,
+     "approach:exiting": 1,
+     "circulating_west:eastbound": 4
+    },
+    {
+     "minute": 5,
+     "degraded": true,
+     "approach:entering": 0,
+     "approach:exiting": 2,
+     "circulating_west:eastbound": 1
+    },
+    {
+     "minute": 6,
+     "degraded": true,
+     "approach:entering": 1,
+     "approach:exiting": 1,
+     "circulating_west:eastbound": 2
+    },
+    {
+     "minute": 7,
+     "degraded": true,
+     "approach:entering": 1,
+     "approach:exiting": 3,
+     "circulating_west:eastbound": 4
+    },
+    {
+     "minute": 8,
+     "degraded": true,
+     "approach:entering": 0,
+     "approach:exiting": 0,
+     "circulating_west:eastbound": 1
+    },
+    {
+     "minute": 9,
+     "degraded": true,
+     "approach:entering": 0,
+     "approach:exiting": 2,
+     "circulating_west:eastbound": 1
+    },
+    {
+     "minute": 10,
+     "degraded": true,
+     "approach:entering": 1,
+     "approach:exiting": 0,
+     "circulating_west:eastbound": 0
+    },
+    {
+     "minute": 11,
+     "degraded": true,
+     "approach:entering": 0,
+     "approach:exiting": 2,
+     "circulating_west:eastbound": 3
+    },
+    {
+     "minute": 12,
+     "degraded": true,
+     "approach:entering": 0,
+     "approach:exiting": 0,
+     "circulating_west:eastbound": 1
+    },
+    {
+     "minute": 13,
+     "degraded": true,
+     "approach:entering": 0,
+     "approach:exiting": 2,
+     "circulating_west:eastbound": 2
+    },
+    {
+     "minute": 14,
+     "degraded": true,
+     "approach:entering": 0,
+     "approach:exiting": 1,
+     "circulating_west:eastbound": 2
+    },
+    {
+     "minute": 15,
+     "degraded": false,
+     "approach:entering": 0,
+     "approach:exiting": 0,
+     "circulating_west:eastbound": 0
+    },
+    {
+     "minute": 16,
+     "degraded": true,
+     "approach:entering": 0,
+     "approach:exiting": 1,
+     "circulating_west:eastbound": 1
+    },
+    {
+     "minute": 17,
+     "degraded": true,
+     "approach:entering": 0,
+     "approach:exiting": 1,
+     "circulating_west:eastbound": 1
+    },
+    {
+     "minute": 18,
+     "degraded": false,
+     "approach:entering": 0,
+     "approach:exiting": 0,
+     "circulating_west:eastbound": 0
+    },
+    {
+     "minute": 19,
+     "degraded": true,
+     "approach:entering": 0,
+     "approach:exiting": 1,
+     "circulating_west:eastbound": 2
+    },
+    {
+     "minute": 20,
+     "degraded": true,
+     "approach:entering": 0,
+     "approach:exiting": 1,
+     "circulating_west:eastbound": 1
+    },
+    {
+     "minute": 21,
+     "degraded": true,
+     "approach:entering": 0,
+     "approach:exiting": 1,
+     "circulating_west:eastbound": 1
+    },
+    {
+     "minute": 22,
+     "degraded": true,
+     "approach:entering": 0,
+     "approach:exiting": 0,
+     "circulating_west:eastbound": 1
+    }
+   ],
+   "forecast": {
+    "movement": "approach:entering",
+    "observed": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "best_model": "persistence",
+    "predicted_next_5": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "backtest": [
+     {
+      "model": "persistence",
+      "horizon": 1,
+      "n": 18,
+      "mae": 0.222,
+      "rmse": 0.471
+     },
+     {
+      "model": "persistence",
+      "horizon": 2,
+      "n": 17,
+      "mae": 0.353,
+      "rmse": 0.594
+     },
+     {
+      "model": "persistence",
+      "horizon": 3,
+      "n": 16,
+      "mae": 0.188,
+      "rmse": 0.433
+     },
+     {
+      "model": "persistence",
+      "horizon": 5,
+      "n": 14,
+      "mae": 0.286,
+      "rmse": 0.535
+     },
+     {
+      "model": "moving_average_3",
+      "horizon": 1,
+      "n": 18,
+      "mae": 0.259,
+      "rmse": 0.416
+     },
+     {
+      "model": "moving_average_3",
+      "horizon": 2,
+      "n": 17,
+      "mae": 0.275,
+      "rmse": 0.428
+     },
+     {
+      "model": "moving_average_3",
+      "horizon": 3,
+      "n": 16,
+      "mae": 0.229,
+      "rmse": 0.363
+     },
+     {
+      "model": "moving_average_3",
+      "horizon": 5,
+      "n": 14,
+      "mae": 0.286,
+      "rmse": 0.418
+     },
+     {
+      "model": "moving_average_5",
+      "horizon": 1,
+      "n": 18,
+      "mae": 0.267,
+      "rmse": 0.406
+     },
+     {
+      "model": "moving_average_5",
+      "horizon": 2,
+      "n": 17,
+      "mae": 0.306,
+      "rmse": 0.445
+     },
+     {
+      "model": "moving_average_5",
+      "horizon": 3,
+      "n": 16,
+      "mae": 0.263,
+      "rmse": 0.384
+     },
+     {
+      "model": "moving_average_5",
+      "horizon": 5,
+      "n": 14,
+      "mae": 0.286,
+      "rmse": 0.393
+     },
+     {
+      "model": "linear_trend_5",
+      "horizon": 1,
+      "n": 18,
+      "mae": 0.261,
+      "rmse": 0.481
+     },
+     {
+      "model": "linear_trend_5",
+      "horizon": 2,
+      "n": 17,
+      "mae": 0.306,
+      "rmse": 0.578
+     },
+     {
+      "model": "linear_trend_5",
+      "horizon": 3,
+      "n": 16,
+      "mae": 0.269,
+      "rmse": 0.507
+     },
+     {
+      "model": "linear_trend_5",
+      "horizon": 5,
+      "n": 14,
+      "mae": 0.457,
+      "rmse": 0.889
+     }
+    ]
+   },
+   "latency_ms": {
+    "monitor": {
+     "p50_ms": 0.9,
+     "p95_ms": 1.3,
+     "p99_ms": 1.6
+    },
+    "detect": {
+     "p50_ms": 45.3,
+     "p95_ms": 74.9,
+     "p99_ms": 120.5
+    },
+    "track": {
+     "p50_ms": 0.6,
+     "p95_ms": 1.3,
+     "p99_ms": 1.7
+    },
+    "count": {
+     "p50_ms": 0.0,
+     "p95_ms": 0.0,
+     "p99_ms": 0.0
+    },
+    "total": {
+     "p50_ms": 49.0,
+     "p95_ms": 79.4,
+     "p99_ms": 125.4
+    }
+   },
+   "model": "yolo11n.pt",
+   "model_sha256": "0ebbc80d4a76",
+   "config_hash": "ee66888ccf4ac273"
+  },
+  {
+   "id": "sample1_expressway",
+   "label": "Sample video \u00b7 congested expressway at dusk",
+   "kind": "sample",
+   "minutes": 0.3,
+   "frames": 401,
+   "stride": 1,
+   "source_fps": 19.35,
+   "throughput_fps": 6.86,
+   "realtime_factor": 0.35,
+   "vehicles_counted": 29,
+   "flow_per_hour": 5043,
+   "counts_by_movement": {
+    "carriageway:toward_camera": 15,
+    "carriageway_low:toward_camera": 14
+   },
+   "counts_by_class": {
+    "car": 20,
+    "motorcycle": 5,
+    "bus": 2,
+    "truck": 2
+   },
+   "counts_by_movement_and_class": {
+    "carriageway:toward_camera": {
+     "bus": 2,
+     "car": 11,
+     "truck": 2
+    },
+    "carriageway_low:toward_camera": {
+     "car": 9,
+     "motorcycle": 5
+    }
+   },
+   "tracks": 116,
+   "moving_tracks": 53,
+   "stationary_tracks": 7,
+   "fragment_share": 0.362,
+   "detections": 5938,
+   "median_confidence": 0.416,
+   "confidence_bins": [
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0
+   ],
+   "confidence_hist": {
+    "bicycle": [
+     0,
+     1,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "bus": [
+     224,
+     150,
+     132,
+     103,
+     64,
+     43,
+     44,
+     38,
+     28,
+     28,
+     16,
+     3,
+     0,
+     0,
+     0
+    ],
+    "car": [
+     677,
+     485,
+     330,
+     310,
+     308,
+     314,
+     295,
+     270,
+     260,
+     260,
+     184,
+     89,
+     112,
+     0,
+     0
+    ],
+    "motorcycle": [
+     43,
+     51,
+     50,
+     42,
+     38,
+     31,
+     14,
+     6,
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "truck": [
+     296,
+     197,
+     147,
+     132,
+     80,
+     34,
+     4,
+     2,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "condition_share": {
+    "nominal": 0.8454,
+    "dense_occlusion": 0.1546
+   },
+   "degraded_frame_share": 0.1546,
+   "per_minute": [
+    {
+     "minute": 0,
+     "degraded": true,
+     "carriageway:toward_camera": 15,
+     "carriageway_low:toward_camera": 14
+    }
+   ],
+   "forecast": null,
+   "latency_ms": {
+    "monitor": {
+     "p50_ms": 13.4,
+     "p95_ms": 17.3,
+     "p99_ms": 19.5
+    },
+    "detect": {
+     "p50_ms": 66.2,
+     "p95_ms": 105.9,
+     "p99_ms": 134.9
+    },
+    "track": {
+     "p50_ms": 2.3,
+     "p95_ms": 3.2,
+     "p99_ms": 3.7
+    },
+    "count": {
+     "p50_ms": 0.1,
+     "p95_ms": 0.1,
+     "p99_ms": 0.1
+    },
+    "total": {
+     "p50_ms": 108.5,
+     "p95_ms": 154.0,
+     "p99_ms": 191.8
+    }
+   },
+   "model": "yolo11n.pt",
+   "model_sha256": "0ebbc80d4a76",
+   "config_hash": "ee66888ccf4ac273"
+  }
+ ]
+}

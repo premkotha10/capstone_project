@@ -1,0 +1,130 @@
+[
+ {
+  "window": "d21_local0200",
+  "local_start": "21 Oct 02:00",
+  "condition": "night",
+  "camera": "Norman Niles #1",
+  "clips_planned": 23,
+  "clips_downloaded": 23
+ },
+ {
+  "window": "d21_local0200",
+  "local_start": "21 Oct 02:00",
+  "condition": "night",
+  "camera": "Norman Niles #2",
+  "clips_planned": 23,
+  "clips_downloaded": 23
+ },
+ {
+  "window": "d21_local0200",
+  "local_start": "21 Oct 02:00",
+  "condition": "night",
+  "camera": "Norman Niles #3",
+  "clips_planned": 23,
+  "clips_downloaded": 23
+ },
+ {
+  "window": "d21_local0200",
+  "local_start": "21 Oct 02:00",
+  "condition": "night",
+  "camera": "Norman Niles #4",
+  "clips_planned": 23,
+  "clips_downloaded": 23
+ },
+ {
+  "window": "d21_local0900",
+  "local_start": "21 Oct 09:00",
+  "condition": "morning_peak",
+  "camera": "Norman Niles #1",
+  "clips_planned": 23,
+  "clips_downloaded": 23
+ },
+ {
+  "window": "d21_local0900",
+  "local_start": "21 Oct 09:00",
+  "condition": "morning_peak",
+  "camera": "Norman Niles #2",
+  "clips_planned": 23,
+  "clips_downloaded": 23
+ },
+ {
+  "window": "d21_local0900",
+  "local_start": "21 Oct 09:00",
+  "condition": "morning_peak",
+  "camera": "Norman Niles #3",
+  "clips_planned": 23,
+  "clips_downloaded": 22
+ },
+ {
+  "window": "d21_local0900",
+  "local_start": "21 Oct 09:00",
+  "condition": "morning_peak",
+  "camera": "Norman Niles #4",
+  "clips_planned": 23,
+  "clips_downloaded": 0
+ },
+ {
+  "window": "d21_local1337",
+  "local_start": "21 Oct 13:37",
+  "condition": "midday",
+  "camera": "Norman Niles #1",
+  "clips_planned": 23,
+  "clips_downloaded": 0
+ },
+ {
+  "window": "d21_local1337",
+  "local_start": "21 Oct 13:37",
+  "condition": "midday",
+  "camera": "Norman Niles #2",
+  "clips_planned": 23,
+  "clips_downloaded": 0
+ },
+ {
+  "window": "d21_local1337",
+  "local_start": "21 Oct 13:37",
+  "condition": "midday",
+  "camera": "Norman Niles #3",
+  "clips_planned": 23,
+  "clips_downloaded": 0
+ },
+ {
+  "window": "d21_local1337",
+  "local_start": "21 Oct 13:37",
+  "condition": "midday",
+  "camera": "Norman Niles #4",
+  "clips_planned": 23,
+  "clips_downloaded": 0
+ },
+ {
+  "window": "d24_local0230",
+  "local_start": "24 Oct 02:30",
+  "condition": "night",
+  "camera": "Norman Niles #1",
+  "clips_planned": 23,
+  "clips_downloaded": 0
+ },
+ {
+  "window": "d24_local0230",
+  "local_start": "24 Oct 02:30",
+  "condition": "night",
+  "camera": "Norman Niles #2",
+  "clips_planned": 23,
+  "clips_downloaded": 0
+ },
+ {
+  "window": "d24_local0230",
+  "local_start": "24 Oct 02:30",
+  "condition": "night",
+  "camera": "Norman Niles #3",
+  "clips_planned": 23,
+  "clips_downloaded": 0
+ },
+ {
+  "window": "d24_local0230",
+  "local_start": "24 Oct 02:30",
+  "condition": "night",
+  "camera": "Norman Niles #4",
+  "clips_planned": 23,
+  "clips_downloaded": 0
+ }
+]

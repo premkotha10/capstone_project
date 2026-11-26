@@ -1,0 +1,6 @@
+# O2 candidate B — perspective-aware counting on the ground plane (needs configs/cameras/<camera>.yaml). SYSTEM_ARCHITECTURE §4.
+extends: base.yaml
+name: o2_b_ground_plane
+description: O2 reference candidate B — YOLO + ByteTrack + homography ground-plane line/zone.
+counting:
+  mode: ground_plane
