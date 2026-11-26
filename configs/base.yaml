@@ -1,0 +1,30 @@
+# Base pipeline configuration. Experiment configs inherit with `extends: base.yaml`.
+# Every key is validated by src/common/config.py::PipelineConfig; unknown keys are rejected.
+name: base
+description: Shared defaults. Not an experiment by itself.
+
+detection:
+  model: yolo11n.pt          # COCO-pretrained; fine-tuned bundles are referenced from DSCI41_MODELS_ROOT
+  confidence_threshold: 0.25
+  iou_threshold: 0.7
+  image_size: 640
+  frame_stride: 1
+
+tracking:
+  algorithm: bytetrack
+  track_activation_threshold: 0.25
+  lost_track_buffer: 30
+  minimum_matching_threshold: 0.8
+  minimum_consecutive_frames: 1
+
+counting:
+  mode: image_line
+  interval_seconds: 60
+  min_track_length: 3
+
+robustness:
+  enabled: false
+
+runtime:
+  seed: 42
+  num_threads: 0

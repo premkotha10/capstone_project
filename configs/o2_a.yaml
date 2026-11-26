@@ -1,0 +1,6 @@
+# O2 candidate A — image-space line counting (no perspective handling). SYSTEM_ARCHITECTURE §4.
+extends: base.yaml
+name: o2_a_image_line
+description: O2 reference candidate A — YOLO + ByteTrack + pixel-space virtual line.
+counting:
+  mode: image_line

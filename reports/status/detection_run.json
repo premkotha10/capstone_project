@@ -1,0 +1,70 @@
+{
+ "rows": [
+  {
+   "measure": "boxes_bus",
+   "label": "bus",
+   "value": 361
+  },
+  {
+   "measure": "boxes_car",
+   "label": "car",
+   "value": 6054
+  },
+  {
+   "measure": "boxes_truck",
+   "label": "truck",
+   "value": 551
+  },
+  {
+   "measure": "latency_p50",
+   "label": "p50",
+   "value": 35.6
+  },
+  {
+   "measure": "latency_p95",
+   "label": "p95",
+   "value": 41.7
+  },
+  {
+   "measure": "latency_p99",
+   "label": "p99",
+   "value": 43.8
+  },
+  {
+   "measure": "frames",
+   "label": "frames processed",
+   "value": 599
+  },
+  {
+   "measure": "throughput_fps",
+   "label": "throughput fps",
+   "value": 20.58
+  }
+ ],
+ "meta": [
+  {
+   "label": "Clip",
+   "value": "Norman Niles #1, 21 Oct 2025 09:13 local"
+  },
+  {
+   "label": "Model",
+   "value": "yolo11n.pt (sha256 0ebbc80d4a76\u2026)"
+  },
+  {
+   "label": "Run finished (UTC)",
+   "value": "2026-11-23T11:25:28.110844+00:00"
+  },
+  {
+   "label": "Config hash",
+   "value": "eb555be0bcd09a57"
+  },
+  {
+   "label": "Frame stride",
+   "value": "2"
+  },
+  {
+   "label": "Caveat",
+   "value": "Measured while two data downloads were using the CPU; not a KPI-6 value."
+  }
+ ]
+}

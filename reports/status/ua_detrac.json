@@ -1,0 +1,142 @@
+[
+ {
+  "sequence": "MVI_40742",
+  "weather": "night",
+  "original_split": "test",
+  "frames": 1655,
+  "vehicles": 33,
+  "mean_density": 15.2,
+  "occluded_pct": 54.1,
+  "downloaded": "yes"
+ },
+ {
+  "sequence": "MVI_40963",
+  "weather": "night",
+  "original_split": "train",
+  "frames": 1820,
+  "vehicles": 144,
+  "mean_density": 6.4,
+  "occluded_pct": 15.2,
+  "downloaded": "yes"
+ },
+ {
+  "sequence": "MVI_39781",
+  "weather": "night",
+  "original_split": "train",
+  "frames": 1861,
+  "vehicles": 50,
+  "mean_density": 4.1,
+  "occluded_pct": 33.2,
+  "downloaded": "yes"
+ },
+ {
+  "sequence": "MVI_40864",
+  "weather": "rainy",
+  "original_split": "test",
+  "frames": 1515,
+  "vehicles": 81,
+  "mean_density": 29.5,
+  "occluded_pct": 48.6,
+  "downloaded": "yes"
+ },
+ {
+  "sequence": "MVI_63553",
+  "weather": "rainy",
+  "original_split": "train",
+  "frames": 1405,
+  "vehicles": 190,
+  "mean_density": 7.7,
+  "occluded_pct": 44.4,
+  "downloaded": "yes"
+ },
+ {
+  "sequence": "MVI_40871",
+  "weather": "rainy",
+  "original_split": "train",
+  "frames": 1720,
+  "vehicles": 37,
+  "mean_density": 21.3,
+  "occluded_pct": 51.9,
+  "downloaded": "yes"
+ },
+ {
+  "sequence": "MVI_40855",
+  "weather": "cloudy",
+  "original_split": "test",
+  "frames": 1090,
+  "vehicles": 55,
+  "mean_density": 27.6,
+  "occluded_pct": 47.2,
+  "downloaded": "pending"
+ },
+ {
+  "sequence": "MVI_40171",
+  "weather": "cloudy",
+  "original_split": "train",
+  "frames": 1150,
+  "vehicles": 44,
+  "mean_density": 7.8,
+  "occluded_pct": 64.4,
+  "downloaded": "pending"
+ },
+ {
+  "sequence": "MVI_40201",
+  "weather": "cloudy",
+  "original_split": "train",
+  "frames": 925,
+  "vehicles": 127,
+  "mean_density": 11.8,
+  "occluded_pct": 29.6,
+  "downloaded": "pending"
+ },
+ {
+  "sequence": "MVI_40141",
+  "weather": "cloudy",
+  "original_split": "train",
+  "frames": 1600,
+  "vehicles": 33,
+  "mean_density": 3.9,
+  "occluded_pct": 3.1,
+  "downloaded": "pending"
+ },
+ {
+  "sequence": "MVI_20011",
+  "weather": "sunny",
+  "original_split": "train",
+  "frames": 664,
+  "vehicles": 53,
+  "mean_density": 11.5,
+  "occluded_pct": 19.7,
+  "downloaded": "pending"
+ },
+ {
+  "sequence": "MVI_39311",
+  "weather": "sunny",
+  "original_split": "test",
+  "frames": 1505,
+  "vehicles": 51,
+  "mean_density": 14.9,
+  "occluded_pct": 38.7,
+  "downloaded": "pending"
+ },
+ {
+  "sequence": "MVI_41063",
+  "weather": "sunny",
+  "original_split": "train",
+  "frames": 1505,
+  "vehicles": 167,
+  "mean_density": 6.7,
+  "occluded_pct": 28.2,
+  "downloaded": "pending"
+ },
+ {
+  "sequence": "MVI_39051",
+  "weather": "sunny",
+  "original_split": "test",
+  "frames": 1051,
+  "vehicles": 30,
+  "mean_density": 2.3,
+  "occluded_pct": 5.4,
+  "downloaded": "pending"
+ }
+]

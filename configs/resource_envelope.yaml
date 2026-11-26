@@ -1,0 +1,18 @@
+# AC-4 frozen resource envelope — DRAFT.
+# Becomes binding when the O2 reference is frozen (end of Phase 8). After that, O2 and O3 comparisons are only
+# valid if run under this exact envelope; the evaluation harness will refuse mismatched runs.
+status: draft
+hardware:
+  cpu: Intel Core Ultra 9 185H (16 cores / 22 threads)
+  accelerator: none (CPU inference); OpenVINO optional, must be declared if used
+  ram_gb: 15.5
+software:
+  python: "3.11"
+  lockfile: uv.lock        # hash of this file is recorded with every run
+workload:
+  input_resolution: native  # to be fixed per dataset at O2 freeze
+  detector_image_size: 640
+  frame_stride: 1
+budget:
+  max_threads: 16
+  latency_measurement: "warm-up then >= 30 measured trials per condition, time.perf_counter_ns, report p50/p95/p99 + failures (KPI-6)"

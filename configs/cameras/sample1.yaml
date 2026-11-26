@@ -1,0 +1,17 @@
+# Counting geometry for the user-supplied sample "tests/Video/sample 1.mp4" (2160x3840 portrait, handheld/overpass view
+# of a congested urban expressway). Placed by inspecting a frame at t = 3 s. Pixel coordinates (O2-A).
+camera_id: sample1
+frame_size: [2160, 3840]
+lines:
+  - name: carriageway
+    description: Across the main carriageway (all visible lanes, including the bus road on the left).
+    p1: [40, 2590]
+    p2: [2140, 2590]
+    positive: away_from_camera  # moving up the image
+    negative: toward_camera     # moving down the image
+  - name: carriageway_low
+    description: Sensitivity line 560 px lower; added after motorcycles filtering between cars were first detected below the upper line.
+    p1: [40, 3150]
+    p2: [2140, 3150]
+    positive: away_from_camera
+    negative: toward_camera
