@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Traffic Control Room – Prototype v2</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f3f1ee;--panel:#fff;--ink:#1d2227;--mute:#626a73;--line:#d9d6d0;--acc:#0b6e69;--g:#2f9e62;--a:#d99a00;--r:#d2453b;--road:#30363d}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#14181c;--panel:#1c2227;--ink:#e9edf0;--mute:#9ba5ae;--line:#2d353c;--acc:#4fc3bb}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#14181c;--panel:#1c2227;--ink:#e9edf0;--mute:#9ba5ae;--line:#2d353c;--acc:#4fc3bb}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Georgia,"Times New Roman",serif}
+.sans,button,select,th,td,.cap,label,.pill{font-family:"Segoe UI",system-ui,sans-serif}
+header{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:16px 22px;border-bottom:1px solid var(--line)}
+header h1{font-size:23px;margin:0;font-weight:700;flex:1 1 320px}
+header p{margin:2px 0 0;font:13px "Segoe UI",system-ui,sans-serif;color:var(--mute);font-weight:400}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button,select{padding:8px 12px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:14px;cursor:pointer}
+button.p{background:var(--acc);border-color:var(--acc);color:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) button.p{color:#06201e}}
+:root[data-theme="dark"] button.p{color:#06201e}
+button.w{border-color:var(--r);color:var(--r)}
+button.w.on{background:var(--r);color:#fff}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+main{max-width:1300px;margin:0 auto;padding:16px 22px 10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.cam{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px}
+.cam h2{font-size:16px;margin:0 0 8px;display:flex;justify-content:space-between;align-items:baseline}
+.pill{font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;color:#fff;background:var(--mute)}
+canvas{width:100%;display:block;border-radius:4px;background:var(--road)}
+.row{display:flex;gap:8px;margin:10px 0 6px;font-family:"Segoe UI",system-ui,sans-serif}
+.k{flex:1;border:1px solid var(--line);border-radius:5px;padding:5px;text-align:center;font-size:12px;color:var(--mute)}
+.k b{display:block;font-size:20px;color:var(--ink)}
+.strip{display:flex;gap:3px;margin-top:6px;min-height:26px}
+.cell{flex:1;height:26px;border-radius:3px;background:var(--line);position:relative}
+.cell.f{background:transparent;border:2px dashed currentColor}
+.cap{font-size:12px;color:var(--mute);margin:4px 0 0}
+.full{grid-column:1/-1;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px}
+.full h2{font-size:16px;margin:0 0 6px}
+.mdl{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;font:13px "Segoe UI",system-ui,sans-serif}
+.mdl div{border-left:3px solid var(--acc);padding:2px 10px}
+.mdl b{display:block;font-size:13.5px}
+#mc{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;font-family:"Segoe UI",system-ui,sans-serif}
+#mc table{width:100%;border-collapse:collapse;font-size:13px}#mc th,#mc td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right}#mc th:first-child,#mc td:first-child{text-align:left}
+.sum{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;font-family:"Segoe UI",system-ui,sans-serif}
+.sum .big{flex:1 1 200px;background:var(--acc);color:#fff;border-radius:6px;padding:10px 16px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sum .big{color:#06201e}}
+:root[data-theme="dark"] .sum .big{color:#06201e}
+.sum .big b{display:block;font-size:38px;line-height:1.05}
+.sum .big span{font-size:13px}
+.sum .k{flex:1 1 90px;display:flex;flex-direction:column;justify-content:center}
+.note{max-width:1300px;margin:0 auto;padding:6px 22px 24px;font:12.5px "Segoe UI",system-ui,sans-serif;color:var(--mute)}
+@media(max-width:860px){main{grid-template-columns:1fr;padding:12px}}
+</style></head><body>
+<header><div style="flex:1 1 320px"><h1>Traffic Control Room</h1>
+<p>Two roadside cameras, live counts, and a 3-interval-ahead congestion forecast</p></div>
+<div class="ctl"><label for="sc" class="cap" style="margin:0">Demand</label>
+<select id="sc"><option value="0.5">Off-peak</option><option value="0.9" selected>Normal</option><option value="1.3">Peak</option><option value="ramp">Rising to peak</option></select>
+<select id="sp" aria-label="Speed"><option value="1">1×</option><option value="2" selected>2×</option><option value="4">4×</option></select>
+<button class="w" id="inc">Stall a lane on Camera 1</button>
+<button class="p" id="run">Start</button><button id="rs">Reset</button></div></header>
+<main>
+<section class="full"><h2>Total vehicles passed (both cameras)</h2><div class="sum" id="sum"></div></section>
+<section class="cam"><h2>Camera 1 · Highway <span class="pill" id="p0">–</span></h2><canvas id="c0" width="640" height="220" aria-label="Camera 1 simulated feed"></canvas>
+<div class="row" id="k0"></div><div class="cap">Interval history, then 3 forecast intervals (dashed)</div><div class="strip" id="s0"></div></section>
+<section class="cam"><h2>Camera 2 · City street <span class="pill" id="p1">–</span></h2><canvas id="c1" width="640" height="220" aria-label="Camera 2 simulated feed"></canvas>
+<div class="row" id="k1"></div><div class="cap">Interval history, then 3 forecast intervals (dashed)</div><div class="strip" id="s1"></div></section>
+<section class="full"><h2>Vehicles per interval: actual and forecast (both cameras)</h2><canvas id="ch" width="1200" height="260" style="background:transparent" aria-label="Actual and forecast chart"></canvas></section>
+<section class="full"><h2>Model comparison: AR(2) vs moving average vs naive</h2><div id="mc"><span class="cap">Needs 7 closed intervals per camera.</span></div><p class="cap">Error is mean absolute error (vehicles per interval), one step ahead on past intervals. Lower is better. All three models are real and run on the counts you see.</p></section>
+<section class="full"><h2>Models in this prototype</h2><div class="mdl">
+<div><b>Detector: RT-DETR (transformer)</b>Replaces YOLOv8. Boxes and classes are simulated here.</div>
+<div><b>Tracker: DeepSORT</b>Replaces ByteTrack. IDs shown on each box; one count per ID.</div>
+<div><b>Forecaster: ARIMA-style AR(2)</b>Replaces LSTM. Fitted live in your browser by least squares on interval counts.</div>
+<div><b>Congestion rule</b>Predicted count vs road capacity: below 40% low, to 75% medium, above high.</div></div></section>
+</main>
+<p class="note">Prototype v2. The forecaster is a real model fitted on the counts you see; the camera feeds and detections are simulated because a web page cannot run RT-DETR on video. Intervals are time-lapsed: each one stands for 5 minutes.</p>
+<script>
+const $=id=>document.getElementById(id),css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const TYPES={car:{w:44,h:20,c:"#4caf7a",p:.6},bus:{w:80,h:24,c:"#f2994a",p:.1},truck:{w:68,h:24,c:"#e06666",p:.14},bike:{w:24,h:11,c:"#5aa9f0",p:.16}};
+const CFG=[{lanes:3,cap:34,spd:2.6,gap:22},{lanes:2,cap:20,spd:1.7,gap:34}],IV=220,LINE=470;
+let cam,frame,run,raf,stall;
+const mk=i=>({cars:[],id:1,counts:{car:0,bus:0,truck:0,bike:0},base:0,rows:[],fc:[]});
+function reset(){cmpKey="";cam=[mk(0),mk(1)];frame=0;run=false;stall=false;cancelAnimationFrame(raf);$("run").textContent="Start";$("inc").classList.remove("on");$("inc").textContent="Stall a lane on Camera 1";render();}
+function dens(){const s=$("sc").value;return s==="ramp"?.45+Math.min(frame/IV/8,1)*.95:+s}
+function pickT(){let r=Math.random(),a=0;for(const k in TYPES){a+=TYPES[k].p;if(r<a)return k}return"car"}
+function laneY(i,l){const n=CFG[i].lanes,h=220/n;return h*l+h/2}
+function spawn(i){const c=cam[i],cf=CFG[i],l=Math.floor(Math.random()*cf.lanes),t=pickT(),k=TYPES[t];
+ if(c.cars.some(v=>v.l===l&&v.x<k.w+28))return;
+ c.cars.push({id:c.id++,t,l,x:-k.w,v:cf.spd*(.8+Math.random()*.4)*(t==="bus"||t==="truck"?.85:1),conf:.6+Math.random()*.38,cnt:false})}
+function step(){const sp=+$("sp").value;
+ for(let s=0;s<sp;s++){frame++;
+  cam.forEach((c,i)=>{const cf=CFG[i];
+   if(frame%Math.max(3,Math.round(cf.gap/dens()))===0)spawn(i);
+   c.cars.forEach((v,j)=>{let sv=v.v;
+     if(i===0&&stall&&v.l===1&&v.x>300&&v.x<440)sv*=.04;
+     const ahead=c.cars.find(o=>o!==v&&o.l===v.l&&o.x>v.x&&o.x-(v.x+TYPES[v.t].w)<14);
+     if(ahead)sv=Math.min(sv,ahead.v*.98);
+     v.v=v.v+(sv-v.v)*.2;v.x+=sv;
+     if(!v.cnt&&v.x+TYPES[v.t].w>LINE){v.cnt=true;c.counts[v.t]++}});
+   c.cars=c.cars.filter(v=>v.x<680);
+   if(frame%IV===0)close(c,i)})}}
+const tot=c=>c.counts.car+c.counts.bus+c.counts.truck+c.counts.bike;
+function close(c,i){c.rows.push(tot(c)-c.base);c.base=tot(c);c.fc=forecast(c.rows,3)}
+// AR(2) with intercept, least squares via normal equations
+function forecast(y,h){const n=y.length;if(n<5){const m=y.slice(-2).reduce((a,b)=>a+b,0)/Math.min(2,n);return Array(h).fill(Math.round(m))}
+ const X=[],T=[];for(let t=2;t<n;t++){X.push([1,y[t-1],y[t-2]]);T.push(y[t])}
+ const A=[[0,0,0],[0,0,0],[0,0,0]],B=[0,0,0];
+ X.forEach((r,k)=>{for(let a=0;a<3;a++){B[a]+=r[a]*T[k];for(let b=0;b<3;b++)A[a][b]+=r[a]*r[b]}});
+ for(let a=0;a<3;a++)A[a][a]+=1e-3*(a?1:0)+1e-6; // tiny ridge
+ const w=solve(A,B);let p1=y[n-1],p2=y[n-2],out=[];
+ for(let k=0;k<h;k++){let p=w[0]+w[1]*p1+w[2]*p2;p=Math.max(0,Math.min(p,Math.max(...y)*1.6));out.push(Math.round(p));p2=p1;p1=p}return out}
+function solve(A,B){const n=3,M=A.map((r,i)=>[...r,B[i]]);
+ for(let i=0;i<n;i++){let m=i;for(let r=i+1;r<n;r++)if(Math.abs(M[r][i])>Math.abs(M[m][i]))m=r;[M[i],M[m]]=[M[m],M[i]];
+  for(let r=i+1;r<n;r++){const f=M[r][i]/M[i][i];for(let c=i;c<=n;c++)M[r][c]-=f*M[i][c]}}
+ const x=[0,0,0];for(let i=n-1;i>=0;i--){let s=M[i][n];for(let j=i+1;j<n;j++)s-=M[i][j]*x[j];x[i]=s/M[i][i]}return x}
+function lvl(v,i){const r=v/CFG[i].cap;return r<.4?0:r<.75?1:2}
+const NM=["LOW","MEDIUM","HIGH"],CL=["--g","--a","--r"];
+function drawCam(i){const c=cam[i],g=$("c"+i).getContext("2d"),n=CFG[i].lanes,lh=220/n;
+ g.clearRect(0,0,640,220);g.fillStyle="#30363d";g.fillRect(0,0,640,220);
+ g.strokeStyle="rgba(255,255,255,.5)";g.setLineDash([20,16]);g.lineWidth=2;for(let l=1;l<n;l++){g.beginPath();g.moveTo(0,lh*l);g.lineTo(640,lh*l);g.stroke()}g.setLineDash([]);
+ g.strokeStyle="#f2c94c";g.lineWidth=3;g.beginPath();g.moveTo(LINE,0);g.lineTo(LINE,220);g.stroke();
+ if(i===0&&stall){g.fillStyle="#d2453b";g.fillRect(360,laneY(0,1)-12,34,24);g.fillStyle="#fff";g.font="bold 11px sans-serif";g.fillText("STALLED",352,laneY(0,1)-18)}
+ g.font="10px sans-serif";
+ c.cars.forEach(v=>{const k=TYPES[v.t],y=laneY(i,v.l)-k.h/2,ok=true;
+  g.fillStyle=k.c+"66";g.fillRect(v.x,y,k.w,k.h);g.strokeStyle=k.c;g.lineWidth=1.8;g.strokeRect(v.x-2,y-2,k.w+4,k.h+4);
+  const t=`${v.t} #${v.id} ${v.conf.toFixed(2)}`,w=g.measureText(t).width+6;g.fillStyle=k.c;g.fillRect(v.x-2,y-15,w,13);g.fillStyle="#0b1116";g.fillText(t,v.x+1,y-5)})}
+function render(){[0,1].forEach(i=>{drawCam(i);const c=cam[i];
+ $("k"+i).innerHTML=["car","bus","truck","bike"].map(k=>`<div class="k"><b>${c.counts[k]}</b>${k}</div>`).join("")+`<div class="k" style="background:var(--acc);border-color:var(--acc);color:#fff"><b style="color:inherit">${tot(c)}</b>total</div>`;
+ const cur=c.fc.length?c.fc[0]:null;const p=$("p"+i);
+ if(cur==null){p.textContent="waiting";p.style.background="var(--mute)"}else{const L=lvl(cur,i);p.textContent=NM[L]+" next";p.style.background=css(CL[L])}
+ const cells=c.rows.slice(-8).map(v=>`<div class="cell" title="${v} vehicles" style="background:${css(CL[lvl(v,i)])}"></div>`).join("")+
+  c.fc.map(v=>`<div class="cell f" title="forecast ${v}" style="color:${css(CL[lvl(v,i)])}"></div>`).join("");
+ $("s"+i).innerHTML=cells||'<span class="cap">No interval closed yet.</span>'});chart();cmp();sumUp()}
+function sumUp(){const K=["car","bus","truck","bike"],t=K.map(k=>cam[0].counts[k]+cam[1].counts[k]),all=t.reduce((a,b)=>a+b,0);
+ $("sum").innerHTML=`<div class="big"><b>${all}</b><span>vehicles passed the counting lines</span></div>`+K.map((k,j)=>`<div class="k"><b>${t[j]}</b>${k}</div>`).join("")+`<div class="k"><b>${tot(cam[0])}</b>Camera 1</div><div class="k"><b>${tot(cam[1])}</b>Camera 2</div>`}
+let cmpKey="";
+function cmp(){const key=cam[0].rows.length+","+cam[1].rows.length;if(key===cmpKey)return;cmpKey=key;let html="";
+ cam.forEach((c,i)=>{const y=c.rows,n=y.length,nm=i?"Camera 2 · City street":"Camera 1 · Highway";
+  if(n<7){html+=`<div><b>${nm}</b><div class="cap">Needs 7 closed intervals (${n} so far).</div></div>`;return}
+  const e=[0,0,0];let k=0;for(let t=5;t<n;t++){const h=y.slice(0,t);e[0]+=Math.abs(forecast(h,1)[0]-y[t]);e[1]+=Math.abs(h[t-1]-y[t]);e[2]+=Math.abs((h[t-1]+h[t-2]+h[t-3])/3-y[t]);k++}
+  const m=e.map(v=>v/k),b=Math.min(...m),L=["AR(2) (used for forecast)","Naive (last value)","Moving average (3)"];
+  html+=`<div><b>${nm}</b><table><thead><tr><th>Model</th><th>MAE</th><th></th></tr></thead><tbody>`+L.map((l,j)=>`<tr><td>${l}</td><td>${m[j].toFixed(2)}</td><td>${m[j]===b?"<b>Best so far</b>":""}</td></tr>`).join("")+`</tbody></table><div class="cap">Tested on ${k} intervals.</div></div>`});
+ $("mc").innerHTML=html}
+function chart(){const cv=$("ch"),g=cv.getContext("2d"),W=1200,H=260,P={l:46,r:16,t:26,b:30};g.clearRect(0,0,W,H);
+ const L=Math.max(cam[0].rows.length,cam[1].rows.length),N=Math.max(L+3,8);
+ const all=cam.flatMap(c=>c.rows.concat(c.fc));const mx=Math.max(30,...all)*1.15;
+ const X=i=>P.l+(W-P.l-P.r)*i/(N-1),Y=v=>H-P.b-(H-P.t-P.b)*v/mx;
+ g.font="12px Segoe UI,sans-serif";g.fillStyle=css("--mute");g.strokeStyle=css("--line");g.lineWidth=1;
+ for(let i=0;i<=4;i++){const y=P.t+(H-P.t-P.b)*i/4;g.beginPath();g.moveTo(P.l,y);g.lineTo(W-P.r,y);g.stroke();g.fillText(Math.round(mx*(1-i/4)),8,y+4)}
+ for(let i=0;i<N;i++)g.fillText(i+1,X(i)-3,H-10);
+ const cols=[css("--acc"),css("--a")];
+ cam.forEach((c,i)=>{const r=c.rows;if(!r.length)return;g.strokeStyle=cols[i];g.fillStyle=cols[i];g.lineWidth=2.5;g.setLineDash([]);
+  g.beginPath();r.forEach((v,k)=>k?g.lineTo(X(k),Y(v)):g.moveTo(X(k),Y(v)));g.stroke();r.forEach((v,k)=>{g.beginPath();g.arc(X(k),Y(v),3.5,0,7);g.fill()});
+  g.setLineDash([6,5]);g.beginPath();g.moveTo(X(r.length-1),Y(r[r.length-1]));c.fc.forEach((v,k)=>g.lineTo(X(r.length+k),Y(v)));g.stroke();g.setLineDash([])});
+ g.fillStyle=cols[0];g.fillRect(W-380,10,14,4);g.fillStyle=css("--mute");g.fillText("Cam 1",W-360,16);
+ g.fillStyle=cols[1];g.fillRect(W-300,10,14,4);g.fillStyle=css("--mute");g.fillText("Cam 2",W-280,16);g.fillText("dashed = forecast",W-220,16)}
+function loop(){if(!run)return;step();render();raf=requestAnimationFrame(loop)}
+$("run").onclick=()=>{run=!run;$("run").textContent=run?"Pause":"Resume";if(run)loop()};
+$("rs").onclick=reset;
+$("inc").onclick=()=>{stall=!stall;$("inc").classList.toggle("on",stall);$("inc").textContent=stall?"Clear the stalled lane":"Stall a lane on Camera 1"};
+matchMedia("(prefers-color-scheme:dark)").addEventListener("change",render);
+reset();
+</script></body></html>
